@@ -1,6 +1,6 @@
 const https = require('https')
 
-const INDEX = 'emi_persons'
+const INDEX = 'live_persons_index' // emi_persons
 
 exports.handler = (event, context, callback) => {
     const options = {
