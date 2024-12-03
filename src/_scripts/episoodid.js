@@ -32,7 +32,11 @@ closeModal = () => {
 
 const populateEpisodes = async () => {
     const episodes = await getEpisodes()
-    const select = document.getElementById('db-feedback-episode-select')
+    const select = document.getElementById('db-feedback2-episode-select')
+    if (!select) {
+        console.warn('Episode select element not found')
+        return episodes
+    }
     episodes.forEach(episode => {
         const option = document.createElement('option')
         option.value = episode.id
@@ -53,9 +57,9 @@ const getEpisodes = async () => {
 
 const prefillFromLocalstorage = () => {
     // if selected episode in local storage, set it
-    const episodeSelect = document.getElementById('db-feedback-episode-select')
+    const episodeSelect = document.getElementById('db-feedback2-episode-select')
     const selectedEpisode = localStorage.getItem('selectedEpisode')
-    if (selectedEpisode) {
+    if (episodeSelect && selectedEpisode) {
         episodeSelect.value = selectedEpisode
     }
     // if email in local storage, set it
