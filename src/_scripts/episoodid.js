@@ -16,8 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     })
     prefillFromLocalstorage()
-    const submitE = get('db-feedback-submit')
-    submitE.addEventListener('click', submitEpisode)
+    const submitE = get('db-feedback2-submit')
+    if (submitE) {
+        submitE.addEventListener('click', submitEpisode)
+    }
 })
 document.onkeydown = function (evnt) {
     if (evnt.key === "Escape") {
@@ -63,7 +65,7 @@ const prefillFromLocalstorage = () => {
         episodeSelect.value = selectedEpisode
     }
     // if email in local storage, set it
-    const emailInput = document.getElementById('db-feedback-email')
+    const emailInput = document.getElementById('db-feedback2-email')
     const email = localStorage.getItem('email')
     if (email) {
         emailInput.value = email
@@ -77,11 +79,11 @@ const submitEpisode = (evnt) => {
     }
 
     // save selected episode to local storage
-    const episodeId = get('db-feedback-episode-select').value
+    const episodeId = get('db-feedback2-episode-select').value
     localStorage.setItem('selectedEpisode', episodeId)
 
     // save email to local storage
-    const email = get('db-feedback-email').value
+    const email = get('db-feedback2-email').value
     localStorage.setItem('email', email)
 
     const xhr2 = new XMLHttpRequest()
@@ -96,7 +98,7 @@ const submitEpisode = (evnt) => {
         console.log('Error:', xhr2.status)
     }
 
-    const formE = get('db-feedback')
+    const formE = get('db-feedback2')
     const formData = new FormData(formE)
     // add current url to form data
     formData.append('url', window.location.href)
@@ -110,7 +112,7 @@ const submitEpisode = (evnt) => {
 }
 
 const validateEmail = () => {
-    const emailInput = get('db-feedback-email')
+    const emailInput = get('db-feedback2-email')
     const email = emailInput.value
     if (!email || email.length === 0) {
         emailInput.classList.add('is-invalid')
