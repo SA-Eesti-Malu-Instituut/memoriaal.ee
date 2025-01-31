@@ -378,7 +378,7 @@ block script
                             pub_b = '</a>'
                         }
                         if (p.emem) {
-                            pub_a = '<a href="https://www.memoriaal.ee/otsing/?q=' + p.id + '">'
+                            pub_a = '<a href="/baas/?q=' + p.id + '&f=all">'
                             pub_b = '</a>'
                         }
                         text.push('<p class="mb-0"># ' + pub_a + p.id + pub_b)
@@ -415,7 +415,7 @@ block script
                                     pereseos = '(' + pereseos + ')'
                                 }
                                 let perekirjed = p.pereseosed[ip].kirjed
-                                text.push('<li class="my-0 pereliige"><a href="?q=' + p.pereseosed[ip].persoon + '">' + p.pereseosed[ip].persoon + ' ' + pereseos + '</a>')
+                                text.push('<li class="my-0 pereliige"><a href="/baas/?q=' + p.pereseosed[ip].persoon + '&f=all">' + p.pereseosed[ip].persoon + ' ' + pereseos + '</a>')
                                 text.push(' : <span onclick="document.querySelector(\'#perekirjed-' + p.pereseosed[ip].persoon + '\').showModal()">' + p.pereseosed[ip].kirje + '</span>')
                                 text.push('</li>')
                                 text.push('<dialog class="perekirjed" id="perekirjed-' + p.pereseosed[ip].persoon + '">')
