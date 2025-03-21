@@ -36,9 +36,9 @@ const replaceLinebreaks = function(text) {
 const triggerResizeAfterSearchUpdate = function() {
     // Wait for DOM to update
     setTimeout(function() {
-        // Check if we're in IE11
-        if (window.isIE11) {
-            // Trigger more aggressive resizing for IE11
+        // Check if we're in IE
+        if (window.isIE) {
+            // Trigger more aggressive resizing for IE
             setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 10);
             setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 100);
             setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 500);
@@ -62,6 +62,51 @@ const triggerResizeAfterSearchUpdate = function() {
                 setTimeout(fixBackgroundIssues, 150);
                 setTimeout(fixBackgroundIssues, 600);
             }
+            
+            // Ensure search results are properly visible
+            setTimeout(function() {
+                try {
+                    var searchResults = document.getElementById('search-results');
+                    if (searchResults) {
+                        // Make search results visible with scrolling if needed
+                        searchResults.style.display = 'block';
+                        searchResults.style.visibility = 'visible';
+                        searchResults.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                        searchResults.style.padding = '15px';
+                        searchResults.style.position = 'relative';
+                        searchResults.style.zIndex = '10';
+                        searchResults.style.maxHeight = 'calc(100vh - 250px)';
+                        searchResults.style.overflow = 'auto';
+                        searchResults.style.marginBottom = '150px';
+                    }
+                    
+                    // Also ensure any content containers are visible
+                    var contentContainers = [
+                        document.getElementById('text'),
+                        document.getElementById('text-text')
+                    ];
+                    
+                    for (var i = 0; i < contentContainers.length; i++) {
+                        var container = contentContainers[i];
+                        if (container) {
+                            container.style.visibility = 'visible';
+                            container.style.display = 'block';
+                            container.style.position = 'relative';
+                            container.style.zIndex = '1';
+                        }
+                    }
+                    
+                    // Ensure there's space for the footer
+                    var spacer = document.getElementById('footer-spacer');
+                    if (!spacer) {
+                        spacer = document.createElement('div');
+                        spacer.id = 'footer-spacer';
+                        spacer.style.height = '150px';
+                        spacer.style.width = '100%';
+                        document.body.appendChild(spacer);
+                    }
+                } catch (e) {}
+            }, 300);
         } else {
             // For modern browsers, a single resize is enough
             window.dispatchEvent(new Event('resize'));

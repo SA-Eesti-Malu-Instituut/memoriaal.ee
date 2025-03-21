@@ -393,141 +393,191 @@ document.addEventListener('DOMContentLoaded', function() {
 // Helper function to fix background issues in IE
 function fixBackgroundIssues() {
   try {
-    // Check for common elements that might have background issues
+    // STEP 1: Fix the body background
     var bodyElement = document.body;
     if (bodyElement) {
-      // Ensure body has proper background handling
+      // Force a background image if needed
       try {
-        var computedStyle = window.getComputedStyle(bodyElement);
-        if (computedStyle && computedStyle.backgroundImage && computedStyle.backgroundImage !== 'none') {
+        // Set essential body styles for proper layout
+        bodyElement.style.minHeight = '100vh';
+        bodyElement.style.position = 'relative';
+        bodyElement.style.overflow = 'auto';
+        
+        // Ensure the body background is visible
+        var computedStyle = window.getComputedStyle ? window.getComputedStyle(bodyElement) : bodyElement.currentStyle;
+        var bgImage = computedStyle ? computedStyle.backgroundImage : '';
+        
+        if (bgImage && bgImage !== 'none') {
           bodyElement.style.backgroundRepeat = 'no-repeat';
           bodyElement.style.backgroundSize = 'cover';
           bodyElement.style.backgroundPosition = 'center center';
+          bodyElement.style.backgroundAttachment = 'fixed';
         }
       } catch (e) {
-        // Fallback for older IE that may not support getComputedStyle
-        if (bodyElement.currentStyle && bodyElement.currentStyle.backgroundImage && 
-            bodyElement.currentStyle.backgroundImage !== 'none') {
-          bodyElement.style.backgroundRepeat = 'no-repeat';
-          // Note: backgroundSize not supported in IE8 and below
-          bodyElement.style.backgroundPosition = 'center center';
-        }
+        // Fallback if we can't get computed style
+        bodyElement.style.backgroundRepeat = 'no-repeat';
+        bodyElement.style.backgroundPosition = 'center center';
       }
     }
     
-    // Clear any unwanted gray backgrounds
-    var potentialGrayElements = [
-      document.getElementById('text'), 
-      document.getElementById('text-text'),
-      document.getElementById('search-results')
+    // STEP 2: Aggressively fix ALL container elements
+    // Apply transparent background to all major content containers
+    var contentSelectors = [
+      '#text', '#text-text', '#search-results', '.container-fluid', 
+      '.container', '.content', '.row', '.col', '.col-12', 
+      '.col-md-9', '.col-md-3', '.search-result'
     ];
     
-    // Add container-fluid elements that aren't navigation
+    // Create a comprehensive list of elements to check
+    var elementsToFix = [];
+    
+    // Add specific elements by ID
+    var specificIds = ['text', 'text-text', 'search-results', 'search', 'content'];
+    for (var i = 0; i < specificIds.length; i++) {
+      var element = document.getElementById(specificIds[i]);
+      if (element) {
+        elementsToFix.push(element);
+      }
+    }
+    
+    // Try to add elements by selectors
     try {
-      var containerFluids = document.querySelectorAll('.container-fluid');
-      for (var k = 0; k < containerFluids.length; k++) {
-        if (!containerFluids[k].id || containerFluids[k].id !== 'navigation') {
-          potentialGrayElements.push(containerFluids[k]);
-        }
+      for (var s = 0; s < contentSelectors.length; s++) {
+        try {
+          var elements = document.querySelectorAll(contentSelectors[s]);
+          for (var e = 0; e < elements.length; e++) {
+            // Skip navigation element
+            if (elements[e].id !== 'navigation') {
+              elementsToFix.push(elements[e]);
+            }
+          }
+        } catch (e) {}
       }
     } catch (e) {}
     
-    // Check each potential gray element
-    for (var i = 0; i < potentialGrayElements.length; i++) {
-      var element = potentialGrayElements[i];
-      if (element) {
+    // STEP 3: Fix all content elements
+    for (var i = 0; i < elementsToFix.length; i++) {
+      var element = elementsToFix[i];
+      if (!element) continue;
+      
+      try {
+        // Force transparency on all content containers
+        element.style.backgroundColor = 'transparent';
+        element.style.background = 'none';
+        
+        // Ensure proper visibility
+        element.style.visibility = 'visible';
+        element.style.display = element.style.display || 'block';
+        
+        // Ensure proper z-index (but don't mess with navigation)
+        if (element.id !== 'navigation') {
+          element.style.position = element.style.position || 'relative';
+          element.style.zIndex = '1';
+        }
+      } catch (e) {}
+    }
+    
+    // STEP 4: Fix scrolling issues
+    try {
+      // Find main content container
+      var textContainer = document.getElementById('text');
+      if (textContainer) {
+        // Set content area to take available space and scroll when needed
+        textContainer.style.minHeight = '200px';
+        textContainer.style.height = 'auto';
+        textContainer.style.maxHeight = 'calc(100vh - 200px)'; // Leave room for footer
+        textContainer.style.overflow = 'auto';
+        textContainer.style.position = 'relative';
+        textContainer.style.zIndex = '1';
+      }
+      
+      // Ensure content is visible above the footer
+      var contentContainers = document.querySelectorAll('.col-12:not(#navigation *)');
+      for (var c = 0; c < contentContainers.length; c++) {
         try {
-          // Try using modern getComputedStyle first
-          var style = window.getComputedStyle(element);
+          contentContainers[c].style.marginBottom = '150px'; // Add space for footer
+          contentContainers[c].style.position = 'relative';
+          contentContainers[c].style.zIndex = '1';
+        } catch (e) {}
+      }
+      
+      // Find search results if present
+      var searchResults = document.getElementById('search-results');
+      if (searchResults) {
+        searchResults.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'; // Semi-transparent background
+        searchResults.style.padding = '15px';
+        searchResults.style.borderRadius = '5px';
+        searchResults.style.marginBottom = '150px'; // Space for footer
+        searchResults.style.position = 'relative';
+        searchResults.style.zIndex = '10'; // Above other content
+        searchResults.style.maxHeight = 'calc(100vh - 250px)';
+        searchResults.style.overflow = 'auto';
+      }
+    } catch (e) {}
+    
+    // STEP 5: Fix any remaining gray backgrounds that might be missed
+    try {
+      // Look for any element with gray background
+      var allElements = document.getElementsByTagName('*');
+      for (var i = 0; i < allElements.length; i++) {
+        var element = allElements[i];
+        if (element.id === 'navigation') continue; // Skip navigation
+        
+        try {
+          var style = window.getComputedStyle ? window.getComputedStyle(element) : element.currentStyle;
           var bgColor = style ? style.backgroundColor : '';
           
-          // For older IE, try currentStyle
-          if (!bgColor && element.currentStyle) {
-            bgColor = element.currentStyle.backgroundColor;
-          }
-          
-          // Check if this element has a gray background
-          if (bgColor && 
-              (bgColor.indexOf('rgb(128, 128, 128') !== -1 || 
-               bgColor.indexOf('rgb(211, 211, 211') !== -1 ||
-               bgColor.indexOf('rgb(169, 169, 169') !== -1 ||
-               bgColor.indexOf('rgb(192, 192, 192') !== -1 ||
-               bgColor.indexOf('rgb(220, 220, 220') !== -1 ||
-               bgColor.indexOf('rgb(240, 240, 240') !== -1 ||
-               bgColor.indexOf('rgb(245, 245, 245') !== -1 ||
-               bgColor.indexOf('#808080') !== -1 ||
-               bgColor.indexOf('#d3d3d3') !== -1 ||
-               bgColor.indexOf('#a9a9a9') !== -1 ||
-               bgColor.indexOf('#c0c0c0') !== -1 ||
-               bgColor.indexOf('#dcdcdc') !== -1 ||
-               bgColor.indexOf('#f0f0f0') !== -1 ||
-               bgColor.indexOf('#f5f5f5') !== -1 ||
-               bgColor.indexOf('gray') !== -1 ||
-               bgColor.indexOf('grey') !== -1 ||
-               bgColor.indexOf('lightgray') !== -1 ||
-               bgColor.indexOf('lightgrey') !== -1 ||
-               bgColor.indexOf('darkgray') !== -1 ||
-               bgColor.indexOf('darkgrey') !== -1)) {
-            // Remove the gray background
-            element.style.backgroundColor = 'transparent';
-            element.style.background = 'none';
-          }
-          
-          // Ensure content containers don't block background
-          if (element.id === 'text' || element.id === 'text-text' || element.id === 'search-results') {
-            element.style.backgroundColor = 'transparent';
-            element.style.background = 'none';
-            
-            // Fix z-index to ensure it doesn't block background
-            if ((style && (style.position === 'relative' || style.position === 'absolute')) ||
-                (element.currentStyle && 
-                 (element.currentStyle.position === 'relative' || 
-                  element.currentStyle.position === 'absolute'))) {
-              element.style.zIndex = '1';
-            }
-          }
-        } catch (e) {
-          // Ignore errors and continue with next element
-          element.style.backgroundColor = 'transparent';
-          element.style.background = 'none';
-        }
-      }
-    }
-    
-    // Check for any modal or overlay backgrounds
-    try {
-      var overlaySelectors = ['.modal-backdrop', '.bg-light', '.bg-secondary', '.bg-gray'];
-      for (var s = 0; s < overlaySelectors.length; s++) {
-        try {
-          var overlays = document.querySelectorAll(overlaySelectors[s]);
-          for (var j = 0; j < overlays.length; j++) {
-            if (overlays[j] && !hasClass(overlays[j], 'fixed-bottom')) {
-              var overlayStyle = window.getComputedStyle ? 
-                                 window.getComputedStyle(overlays[j]) : 
-                                 overlays[j].currentStyle;
-                                 
-              var display = overlayStyle ? overlayStyle.display : '';
-              
-              if (!display || display !== 'none') {
-                // If this is a full-screen overlay with gray, make it transparent
-                overlays[j].style.backgroundColor = 'transparent';
-                overlays[j].style.background = 'none';
+          // Check if element has a gray background or no explicit background
+          if (bgColor) {
+            // Match any gray shade
+            if (bgColor.indexOf('rgb(') === 0 && bgColor.indexOf('a,') === -1) {
+              // Extract RGB values for non-transparent colors
+              var rgb = bgColor.match(/\d+/g);
+              if (rgb && rgb.length >= 3) {
+                var r = parseInt(rgb[0]);
+                var g = parseInt(rgb[1]);
+                var b = parseInt(rgb[2]);
+                
+                // Check if it's a gray tone (r ≈ g ≈ b)
+                var isGray = Math.abs(r - g) < 30 && Math.abs(g - b) < 30 && Math.abs(r - b) < 30;
+                if (isGray && r > 90) { // Not black but gray
+                  element.style.backgroundColor = 'transparent';
+                  element.style.background = 'none';
+                }
               }
+            } else if (
+              bgColor.indexOf('#') === 0 || 
+              bgColor.indexOf('gray') !== -1 || 
+              bgColor.indexOf('grey') !== -1
+            ) {
+              element.style.backgroundColor = 'transparent';
+              element.style.background = 'none';
             }
           }
-        } catch (e) {
-          // Ignore errors with specific selectors
-        }
+        } catch (e) {}
       }
-    } catch (e) {
-      // Ignore errors with querySelectorAll
-    }
+    } catch (e) {}
     
-    // Check for any gray search area
-    var searchArea = document.getElementById('search');
-    if (searchArea) {
-      searchArea.style.backgroundColor = 'transparent';
-      searchArea.style.background = 'none';
+    // STEP 6: Ensure footer has proper spacing
+    var navigation = document.getElementById('navigation');
+    if (navigation) {
+      navigation.style.position = 'fixed';
+      navigation.style.bottom = '0';
+      navigation.style.left = '0';
+      navigation.style.right = '0';
+      navigation.style.zIndex = '1030';
+      
+      // Add a spacer div if it doesn't exist
+      var spacer = document.getElementById('footer-spacer');
+      if (!spacer) {
+        try {
+          spacer = document.createElement('div');
+          spacer.id = 'footer-spacer';
+          spacer.style.height = '150px';
+          spacer.style.width = '100%';
+          document.body.appendChild(spacer);
+        } catch (e) {}
+      }
     }
   } catch (e) {
     // Global catch to prevent script breaking
