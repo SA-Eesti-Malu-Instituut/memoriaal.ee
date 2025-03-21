@@ -13,10 +13,12 @@ const copy2clipboard = function (DomE, transparentE = null) {
         return
     }
     navigator.clipboard.writeText(clip)
-    transparentE = transparentE || DomE.firstChild?.nextSibling
+    transparentE = transparentE || (DomE.firstChild && DomE.firstChild.nextSibling)
     if (transparentE) {
         transparentE.classList.remove('transparent')
-        setTimeout(() => { transparentE.classList.add('transparent') }, 400)
+        setTimeout(function() { 
+            transparentE.classList.add('transparent') 
+        }, 400)
     }
 }
 
@@ -26,20 +28,20 @@ const qs = function (key) {
     return match && decodeURIComponent(match[1].replace(/\+/g, " "))
 }
 
-const replaceLinebreaks = (text) => {
+const replaceLinebreaks = function(text) {
     const replaced = text.replace(/(\\n\\r|\\n|\\r)+/g, '<br/>')
     return replaced
 }
 
-const triggerResizeAfterSearchUpdate = () => {
+const triggerResizeAfterSearchUpdate = function() {
     // Wait for DOM to update
-    setTimeout(() => {
+    setTimeout(function() {
         // Check if we're in IE11
         if (window.isIE11) {
             // Trigger more aggressive resizing for IE11
-            setTimeout(() => window.dispatchEvent(new CustomEvent('resize')), 10);
-            setTimeout(() => window.dispatchEvent(new CustomEvent('resize')), 100);
-            setTimeout(() => window.dispatchEvent(new CustomEvent('resize')), 500);
+            setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 10);
+            setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 100);
+            setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 500);
         } else {
             // For modern browsers, a single resize is enough
             window.dispatchEvent(new Event('resize'));
