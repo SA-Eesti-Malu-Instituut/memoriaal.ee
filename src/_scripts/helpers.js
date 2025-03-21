@@ -42,6 +42,20 @@ const triggerResizeAfterSearchUpdate = function() {
             setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 10);
             setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 100);
             setTimeout(function() { window.dispatchEvent(new CustomEvent('resize')) }, 500);
+            
+            // Ensure navigation visibility after search results load
+            if (typeof ensureNavigationVisibility === 'function') {
+                var navigation = document.getElementById('navigation');
+                if (navigation) {
+                    setTimeout(function() { 
+                        ensureNavigationVisibility(navigation); 
+                    }, 50);
+                    
+                    setTimeout(function() { 
+                        ensureNavigationVisibility(navigation); 
+                    }, 300);
+                }
+            }
         } else {
             // For modern browsers, a single resize is enough
             window.dispatchEvent(new Event('resize'));

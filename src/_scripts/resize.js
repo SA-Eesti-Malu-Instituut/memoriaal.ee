@@ -11,6 +11,13 @@ $(function () {
             $('#navigation')[0].offsetHeight;
             // Then add it back
             $('#navigation').addClass('fixed-bottom');
+            
+            // Call the ensureNavigationVisibility function if it exists
+            if (typeof ensureNavigationVisibility === 'function') {
+                setTimeout(function() {
+                    ensureNavigationVisibility(document.getElementById('navigation'));
+                }, 50);
+            }
         }
 
         $('#navigation img').addClass('d-none')
@@ -44,6 +51,11 @@ $(function () {
             // Extra step for IE11 - force repaint for fixed-bottom
             if (isIE11) {
                 $('#navigation').css({position: 'fixed', bottom: '0'});
+                
+                // Extra check for IE11 navigation visibility
+                if (typeof ensureNavigationVisibility === 'function') {
+                    ensureNavigationVisibility(document.getElementById('navigation'));
+                }
             }
         }
 

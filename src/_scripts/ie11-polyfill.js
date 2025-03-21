@@ -174,6 +174,27 @@ document.addEventListener('DOMContentLoaded', function() {
   // Also trigger on window load when all resources are fully loaded
   window.addEventListener('load', function() {
     triggerIE11Resize();
+    
+    // Special fix for navigation menu in IE11
+    if (window.isIE11) {
+      var navigation = document.getElementById('navigation');
+      if (navigation) {
+        // Force IE11 to recalculate fixed-bottom layout
+        ensureNavigationVisibility(navigation);
+        
+        // Re-check visibility after a delay
+        setTimeout(function() {
+          ensureNavigationVisibility(navigation);
+        }, 500);
+        
+        // Add click handler to ensure navigation remains visible when interacted with
+        document.body.addEventListener('click', function() {
+          setTimeout(function() {
+            ensureNavigationVisibility(navigation);
+          }, 100);
+        });
+      }
+    }
   });
   
   // For fixed bottom elements specifically
@@ -194,4 +215,45 @@ document.addEventListener('DOMContentLoaded', function() {
       window.dispatchEvent(new CustomEvent('resize'));
     }, 300);
   }
-}); 
+});
+
+// Helper function to ensure footer navigation is visible in IE11
+function ensureNavigationVisibility(navigation) {
+  if (!navigation) return;
+  
+  // Force visibility of navigation container
+  if (window.getComputedStyle(navigation).display === 'none') {
+    navigation.style.display = 'block';
+  }
+  
+  // Get navigation children
+  var navRows = navigation.getElementsByClassName('row');
+  for (var i = 0; i < navRows.length; i++) {
+    // Force visibility on each row
+    navRows[i].style.display = 'flex';
+    navRows[i].style.visibility = 'visible';
+  }
+  
+  // Special handling for the language selection row
+  var localeElement = document.getElementById('text-locale');
+  if (localeElement && localeElement.parentElement) {
+    // Make sure the language row is visible
+    localeElement.parentElement.style.display = 'flex';
+    localeElement.parentElement.style.visibility = 'visible';
+  }
+  
+  // Special IE11 positioning fix
+  if (window.innerWidth >= 768) {
+    navigation.style.position = 'fixed';
+    navigation.style.bottom = '0';
+    navigation.style.left = '0';
+    navigation.style.right = '0';
+    navigation.style.zIndex = '1030';
+    
+    // Check if we need to force menu visibility
+    var menuRow = navRows.length > 1 ? navRows[1] : null;
+    if (menuRow && window.getComputedStyle(menuRow).display === 'none') {
+      menuRow.style.display = 'flex';
+    }
+  }
+} 
