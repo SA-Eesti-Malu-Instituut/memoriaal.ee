@@ -37,6 +37,8 @@ html(lang=self.locale)
         if self.popup
             include popup.pug
 
+        //- Add IE11 polyfill for older browsers (like SiteKiosk)
+        script(src='/js/ie11-polyfill.js')
         script(src='/js/jquery-3.3.1.min.js')
         script(src='/script.js')
 
