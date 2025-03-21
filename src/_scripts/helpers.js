@@ -63,36 +63,48 @@ const triggerResizeAfterSearchUpdate = function() {
                 setTimeout(fixBackgroundIssues, 600);
             }
             
-            // Ensure search results are properly visible
+            // Fix search results while preserving layout
             setTimeout(function() {
                 try {
-                    var searchResults = document.getElementById('search-results');
-                    if (searchResults) {
-                        // Make search results visible with scrolling if needed
-                        searchResults.style.display = 'block';
-                        searchResults.style.visibility = 'visible';
-                        searchResults.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-                        searchResults.style.padding = '15px';
-                        searchResults.style.position = 'relative';
-                        searchResults.style.zIndex = '10';
-                        searchResults.style.maxHeight = 'calc(100vh - 250px)';
-                        searchResults.style.overflow = 'auto';
-                        searchResults.style.marginBottom = '150px';
+                    // Make sure search stays on the right on larger screens
+                    var searchCol = document.querySelector('.col-md-3');
+                    var contentCol = document.querySelector('.col-md-9');
+                    
+                    if (searchCol && contentCol && window.innerWidth >= 768) {
+                        searchCol.style.cssFloat = 'right';
+                        contentCol.style.cssFloat = 'left';
                     }
                     
-                    // Also ensure any content containers are visible
-                    var contentContainers = [
-                        document.getElementById('text'),
-                        document.getElementById('text-text')
-                    ];
+                    // Ensure row elements maintain flex layout
+                    var rowElements = document.querySelectorAll('.row');
+                    for (var r = 0; r < rowElements.length; r++) {
+                        var row = rowElements[r];
+                        if (row.parentElement && row.parentElement.id === 'navigation') continue;
+                        
+                        // Preserve flex layout
+                        row.style.display = 'flex';
+                    }
                     
-                    for (var i = 0; i < contentContainers.length; i++) {
-                        var container = contentContainers[i];
-                        if (container) {
-                            container.style.visibility = 'visible';
-                            container.style.display = 'block';
-                            container.style.position = 'relative';
-                            container.style.zIndex = '1';
+                    // Fix search results visibility without changing layout
+                    var searchResults = document.getElementById('search-results');
+                    if (searchResults) {
+                        // Make results readable but keep layout
+                        searchResults.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                        searchResults.style.visibility = 'visible';
+                        searchResults.style.zIndex = '5';
+                        searchResults.style.marginBottom = '150px';
+                        searchResults.style.overflow = 'auto';
+                    }
+                    
+                    // Ensure containers are visible but preserve layout
+                    var containers = ['text', 'text-text', 'search-count'];
+                    for (var i = 0; i < containers.length; i++) {
+                        var el = document.getElementById(containers[i]);
+                        if (el) {
+                            el.style.visibility = 'visible';
+                            el.style.backgroundColor = 'transparent';
+                            el.style.position = el.style.position || 'relative';
+                            el.style.zIndex = '1';
                         }
                     }
                     
@@ -103,6 +115,7 @@ const triggerResizeAfterSearchUpdate = function() {
                         spacer.id = 'footer-spacer';
                         spacer.style.height = '150px';
                         spacer.style.width = '100%';
+                        spacer.style.clear = 'both';
                         document.body.appendChild(spacer);
                     }
                 } catch (e) {}

@@ -420,147 +420,160 @@ function fixBackgroundIssues() {
       }
     }
     
-    // STEP 2: Aggressively fix ALL container elements
-    // Apply transparent background to all major content containers
-    var contentSelectors = [
+    // STEP 2: Target specific containers but preserve layout
+    // List of containers to make transparent without changing display properties
+    var transparentSelectors = [
       '#text', '#text-text', '#search-results', '.container-fluid', 
-      '.container', '.content', '.row', '.col', '.col-12', 
-      '.col-md-9', '.col-md-3', '.search-result'
+      '.col-12', '.col-md-9', '.col-md-3'
     ];
     
-    // Create a comprehensive list of elements to check
-    var elementsToFix = [];
+    // Create a list of elements to make transparent
+    var elementsToMakeTransparent = [];
     
     // Add specific elements by ID
-    var specificIds = ['text', 'text-text', 'search-results', 'search', 'content'];
+    var specificIds = ['text', 'text-text', 'search-results', 'search'];
     for (var i = 0; i < specificIds.length; i++) {
       var element = document.getElementById(specificIds[i]);
       if (element) {
-        elementsToFix.push(element);
+        elementsToMakeTransparent.push(element);
       }
     }
     
     // Try to add elements by selectors
     try {
-      for (var s = 0; s < contentSelectors.length; s++) {
+      for (var s = 0; s < transparentSelectors.length; s++) {
         try {
-          var elements = document.querySelectorAll(contentSelectors[s]);
+          var elements = document.querySelectorAll(transparentSelectors[s]);
           for (var e = 0; e < elements.length; e++) {
             // Skip navigation element
             if (elements[e].id !== 'navigation') {
-              elementsToFix.push(elements[e]);
+              elementsToMakeTransparent.push(elements[e]);
             }
           }
         } catch (e) {}
       }
     } catch (e) {}
     
-    // STEP 3: Fix all content elements
-    for (var i = 0; i < elementsToFix.length; i++) {
-      var element = elementsToFix[i];
+    // STEP 3: Fix content elements but preserve display properties
+    for (var i = 0; i < elementsToMakeTransparent.length; i++) {
+      var element = elementsToMakeTransparent[i];
       if (!element) continue;
       
       try {
-        // Force transparency on all content containers
+        // Force transparency without changing display
         element.style.backgroundColor = 'transparent';
         element.style.background = 'none';
         
-        // Ensure proper visibility
+        // Ensure visibility without changing display mode
         element.style.visibility = 'visible';
-        element.style.display = element.style.display || 'block';
         
         // Ensure proper z-index (but don't mess with navigation)
         if (element.id !== 'navigation') {
-          element.style.position = element.style.position || 'relative';
+          // Only set position if not already set
+          if (!element.style.position || element.style.position === 'static') {
+            element.style.position = 'relative';
+          }
           element.style.zIndex = '1';
         }
       } catch (e) {}
     }
     
-    // STEP 4: Fix scrolling issues
+    // STEP 4: Fix layout for search bar and main content
     try {
+      // Special handling for layout
+      var searchCol = document.querySelector('.col-md-3');
+      var contentCol = document.querySelector('.col-md-9');
+      
+      if (searchCol && contentCol) {
+        // Make sure search stays on the right on larger screens
+        if (window.innerWidth >= 768) {
+          searchCol.style.cssFloat = 'right';
+          contentCol.style.cssFloat = 'left';
+        }
+      }
+      
+      // Find row elements and ensure they maintain flex layout
+      var rowElements = document.querySelectorAll('.row');
+      for (var r = 0; r < rowElements.length; r++) {
+        var row = rowElements[r];
+        if (row.parentElement && row.parentElement.id === 'navigation') continue;
+        
+        row.style.display = 'flex';
+        if (isOldIE()) {
+          row.style.display = 'table';
+          var children = row.children;
+          for (var c = 0; c < children.length; c++) {
+            children[c].style.display = 'table-cell';
+          }
+        }
+      }
+      
       // Find main content container
       var textContainer = document.getElementById('text');
       if (textContainer) {
-        // Set content area to take available space and scroll when needed
+        // Keep original layout but ensure content is visible
         textContainer.style.minHeight = '200px';
-        textContainer.style.height = 'auto';
-        textContainer.style.maxHeight = 'calc(100vh - 200px)'; // Leave room for footer
         textContainer.style.overflow = 'auto';
-        textContainer.style.position = 'relative';
-        textContainer.style.zIndex = '1';
+        textContainer.style.marginBottom = '150px'; // Space for footer
       }
       
-      // Ensure content is visible above the footer
-      var contentContainers = document.querySelectorAll('.col-12:not(#navigation *)');
-      for (var c = 0; c < contentContainers.length; c++) {
-        try {
-          contentContainers[c].style.marginBottom = '150px'; // Add space for footer
-          contentContainers[c].style.position = 'relative';
-          contentContainers[c].style.zIndex = '1';
-        } catch (e) {}
-      }
-      
-      // Find search results if present
+      // Make search results visible with proper spacing
       var searchResults = document.getElementById('search-results');
       if (searchResults) {
         searchResults.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'; // Semi-transparent background
-        searchResults.style.padding = '15px';
-        searchResults.style.borderRadius = '5px';
+        searchResults.style.padding = '10px';
         searchResults.style.marginBottom = '150px'; // Space for footer
-        searchResults.style.position = 'relative';
-        searchResults.style.zIndex = '10'; // Above other content
-        searchResults.style.maxHeight = 'calc(100vh - 250px)';
+        searchResults.style.zIndex = '5'; // Above background
         searchResults.style.overflow = 'auto';
+      }
+      
+      // Find the search bar container
+      var searchBar = document.querySelector('form.search');
+      if (searchBar) {
+        searchBar.style.visibility = 'visible';
+        searchBar.style.zIndex = '5';
       }
     } catch (e) {}
     
-    // STEP 5: Fix any remaining gray backgrounds that might be missed
+    // STEP 5: Fix any gray backgrounds more precisely
     try {
-      // Look for any element with gray background
-      var allElements = document.getElementsByTagName('*');
-      for (var i = 0; i < allElements.length; i++) {
-        var element = allElements[i];
+      // Look for gray backgrounds, specifically in content areas
+      var contentAreas = document.querySelectorAll('.container-fluid, .col-12, .col-md-9, .col-md-3, #text, #text-text, #search-results');
+      for (var i = 0; i < contentAreas.length; i++) {
+        var element = contentAreas[i];
         if (element.id === 'navigation') continue; // Skip navigation
         
         try {
           var style = window.getComputedStyle ? window.getComputedStyle(element) : element.currentStyle;
           var bgColor = style ? style.backgroundColor : '';
           
-          // Check if element has a gray background or no explicit background
+          // Check if it has a gray background
           if (bgColor) {
-            // Match any gray shade
-            if (bgColor.indexOf('rgb(') === 0 && bgColor.indexOf('a,') === -1) {
-              // Extract RGB values for non-transparent colors
+            // Match any gray shade using RGB analysis
+            if (bgColor.indexOf('rgb(') === 0) {
               var rgb = bgColor.match(/\d+/g);
               if (rgb && rgb.length >= 3) {
                 var r = parseInt(rgb[0]);
                 var g = parseInt(rgb[1]);
                 var b = parseInt(rgb[2]);
                 
-                // Check if it's a gray tone (r ≈ g ≈ b)
+                // If colors are close to each other, it's a gray tone
                 var isGray = Math.abs(r - g) < 30 && Math.abs(g - b) < 30 && Math.abs(r - b) < 30;
-                if (isGray && r > 90) { // Not black but gray
+                if (isGray) {
                   element.style.backgroundColor = 'transparent';
                   element.style.background = 'none';
                 }
               }
-            } else if (
-              bgColor.indexOf('#') === 0 || 
-              bgColor.indexOf('gray') !== -1 || 
-              bgColor.indexOf('grey') !== -1
-            ) {
-              element.style.backgroundColor = 'transparent';
-              element.style.background = 'none';
             }
           }
         } catch (e) {}
       }
     } catch (e) {}
     
-    // STEP 6: Ensure footer has proper spacing
+    // STEP 6: Ensure footer has proper spacing and preserve layout
     var navigation = document.getElementById('navigation');
     if (navigation) {
+      // Ensure fixed position
       navigation.style.position = 'fixed';
       navigation.style.bottom = '0';
       navigation.style.left = '0';
@@ -575,6 +588,7 @@ function fixBackgroundIssues() {
           spacer.id = 'footer-spacer';
           spacer.style.height = '150px';
           spacer.style.width = '100%';
+          spacer.style.clear = 'both';
           document.body.appendChild(spacer);
         } catch (e) {}
       }

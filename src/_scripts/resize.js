@@ -57,7 +57,6 @@ $(function () {
                 // Ensure minimum height and enable scrolling
                 $('#text').css({
                     'min-height': '200px',
-                    'height': 'auto',
                     'max-height': textHeight + 'px',
                     'overflow-y': 'auto',
                     'position': 'relative',
@@ -77,6 +76,15 @@ $(function () {
                         'overflow-y': 'auto'
                     });
                 }
+                
+                // Make sure search stays on the right
+                if ($(window).width() >= 768) {
+                    $('.col-md-3').css('float', 'right');
+                    $('.col-md-9').css('float', 'left');
+                }
+                
+                // Ensure rows maintain flex layout
+                $('.row').not('#navigation .row').css('display', 'flex');
             } else {
                 // Standard behavior for modern browsers
                 $('#text').css('height', ($(window).height() - $('#navigation').outerHeight(true)) + 'px')
