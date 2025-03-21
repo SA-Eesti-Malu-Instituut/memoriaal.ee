@@ -237,6 +237,11 @@ block script
                             'visibility': 'visible',
                             'color': 'inherit'
                         });
+                        
+                        // Trigger resize to ensure layout is correct
+                        if (typeof triggerResizeAfterSearchUpdate === 'function') {
+                            triggerResizeAfterSearchUpdate();
+                        }
                     },
                     error: function(error) {
                         $('#search-count').html('#{self.result.error}')

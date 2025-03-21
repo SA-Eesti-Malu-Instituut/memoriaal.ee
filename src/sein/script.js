@@ -49,6 +49,11 @@ $(function () {
 
                 $('#search-results').append(text.join(''))
             }
+            
+            // Trigger resize to ensure layout is correct
+            if (typeof triggerResizeAfterSearchUpdate === 'function') {
+                triggerResizeAfterSearchUpdate();
+            }
         },
         error: function( error) {
             console.log(error)

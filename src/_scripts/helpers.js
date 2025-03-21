@@ -30,3 +30,19 @@ const replaceLinebreaks = (text) => {
     const replaced = text.replace(/(\\n\\r|\\n|\\r)+/g, '<br/>')
     return replaced
 }
+
+const triggerResizeAfterSearchUpdate = () => {
+    // Wait for DOM to update
+    setTimeout(() => {
+        // Check if we're in IE11
+        if (window.isIE11) {
+            // Trigger more aggressive resizing for IE11
+            setTimeout(() => window.dispatchEvent(new CustomEvent('resize')), 10);
+            setTimeout(() => window.dispatchEvent(new CustomEvent('resize')), 100);
+            setTimeout(() => window.dispatchEvent(new CustomEvent('resize')), 500);
+        } else {
+            // For modern browsers, a single resize is enough
+            window.dispatchEvent(new Event('resize'));
+        }
+    }, 100);
+}
