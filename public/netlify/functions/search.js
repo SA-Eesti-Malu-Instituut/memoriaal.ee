@@ -2,8 +2,6 @@ const https = require('https')
 
 const INDEX = 'live_persons_index' // emi_persons
 
-alert('Hello');
-
 exports.handler = (event, context, callback) => {
     const options = {
         hostname: '94abc9318c712977e8c684628aa5ea0f.us-east-1.aws.found.io',
