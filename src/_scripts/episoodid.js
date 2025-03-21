@@ -8,6 +8,8 @@ const episodesApi = `${gscriptBase}/${episodesApiId}/exec?Episoodid`
 
 const episodes = []
 
+alert('Test');
+
 document.addEventListener('DOMContentLoaded', function () {
     // fetch episodes from api and add to global episodes array
     populateEpisodes().then(episodes => {
