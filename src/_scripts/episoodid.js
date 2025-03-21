@@ -8,6 +8,14 @@ const episodesApi = `${gscriptBase}/${episodesApiId}/exec?Episoodid`
 
 const episodes = []
 
+// Helper function to trigger window resize
+const triggerWindowResize = () => {
+    setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+        console.log('Window resize event triggered');
+    }, 100);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     // fetch episodes from api and add to global episodes array
     populateEpisodes().then(episodes => {
@@ -20,6 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (submitE) {
         submitE.addEventListener('click', submitEpisode)
     }
+    
+    // Trigger resize event to fix resolution and scaling issues
+    triggerWindowResize();
 })
 document.onkeydown = function (evnt) {
     if (evnt.key === "Escape") {
