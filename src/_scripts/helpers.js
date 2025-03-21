@@ -56,6 +56,12 @@ const triggerResizeAfterSearchUpdate = function() {
                     }, 300);
                 }
             }
+            
+            // Fix background issues after search results load
+            if (typeof fixBackgroundIssues === 'function') {
+                setTimeout(fixBackgroundIssues, 150);
+                setTimeout(fixBackgroundIssues, 600);
+            }
         } else {
             // For modern browsers, a single resize is enough
             window.dispatchEvent(new Event('resize'));

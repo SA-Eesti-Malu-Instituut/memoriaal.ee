@@ -89,6 +89,12 @@ $(function () {
         if (isIE11) {
             setTimeout(windowResized, 100);
             setTimeout(windowResized, 500);
+            
+            // Fix background issues after load and resize
+            if (typeof fixBackgroundIssues === 'function') {
+                setTimeout(fixBackgroundIssues, 200);
+                setTimeout(fixBackgroundIssues, 800);
+            }
         }
     })
 
