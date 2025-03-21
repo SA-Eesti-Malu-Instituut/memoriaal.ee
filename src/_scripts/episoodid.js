@@ -47,7 +47,7 @@ const populateEpisodes = async () => {
     const episodes = await getEpisodes()
     const select = document.getElementById('db-feedback2-episode-select')
     if (!select) {
-        console.warn('Episode select element not found')
+        // Silently return if element doesn't exist on this page
         return episodes
     }
     episodes.forEach(episode => {
