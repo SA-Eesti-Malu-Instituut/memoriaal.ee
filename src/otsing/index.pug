@@ -45,6 +45,18 @@ block content
 block script
     script.
         $(function () {
+            // Ensure search results container is visible with proper styling
+            $('#search-results').css({
+                'display': 'block',
+                'visibility': 'visible',
+                'color': 'inherit'
+            });
+            
+            // Helper function to replace newlines with <br> tags
+            var replaceLinebreaks = function(text) {
+                return text ? text.replace(/\n/g, '<br>') : '';
+            };
+            
             var qs = function (key) {
                 key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&")
                 var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"))
@@ -105,13 +117,17 @@ block script
                     type : 'POST',
                     cache: false,
                     success: function (data) {
-                        console.log(data.error || 'All green')
                         $('#search-count').html(data.hits.total.value + (data.hits.total.value === 1 ? ' #{self.result.count.one}' : ' #{self.result.count.multiple}'))
                         const hits = data.hits.hits
 
                         if (idQuery && hits[0]._source.redirect) {
                             window.location.href = '?q=' + hits[0]._source.redirect
                         }
+                        
+                        // Clear results container
+                        $('#search-results').empty();
+                        
+                        // Build all results
                         for (var i = 0; i < hits.length; i++) {
                             var text = []
                             var p = hits[i]._source
@@ -119,7 +135,6 @@ block script
                             // skip records with redirect
                             if (p.redirect) { continue }
 
-                            //- console.log(JSON.stringify(p, 0, 2))
                             text.push('<div id="' + p.id + '" class="search-result pt-2 pb-4">')
                             text.push('<div class="row">')
 
@@ -166,7 +181,6 @@ block script
                                         pereseos.seos = '(' + pereseos.seos + ')'
                                     }
                                     let perekirjed = pereseos.kirjed
-                                    console.log(pereseos)
                                     // if person has .emem record, link to memoriaal.ee;
                                     // eise, if it has wwii record, link to wwii-refugees.ee
                                     let pub_a = pub_b = ''
@@ -212,12 +226,20 @@ block script
                             text.push('</div>')
                             text.push('</div>')
                             text.push('</div>')
-
-                            $('#search-results').append(text.join(''))
+                            
+                            // Append each result as it's built
+                            $('#search-results').append(text.join(''));
                         }
+                        
+                        // Make sure results are visible
+                        $('#search-results').css({
+                            'display': 'block',
+                            'visibility': 'visible',
+                            'color': 'inherit'
+                        });
                     },
-                    error: function( error) {
-                        console.log(error)
+                    error: function(error) {
+                        $('#search-count').html('#{self.result.error}')
                     }
                 })
             }
@@ -261,8 +283,6 @@ block script
                 var $form = $(this)
 
                 $.post($form.attr('action'), $form.serialize(), function (data) {
-                    console.log(data)
-
                     $('#db-feedback-title, #db-feedback-text, #db-feedback').addClass('d-none')
                     $('#db-feedback-success').removeClass('d-none')
 
