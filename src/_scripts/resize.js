@@ -1,6 +1,18 @@
 $(function () {
-    var doit
+    var doit;
+    var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+    
     var windowResized = function () {
+        // Special handling for IE11 and fixed-bottom
+        if (isIE11 && $(window).width() >= 768) {
+            // Force IE11 to recalculate fixed-bottom position
+            $('#navigation').removeClass('fixed-bottom');
+            // Force a reflow
+            $('#navigation')[0].offsetHeight;
+            // Then add it back
+            $('#navigation').addClass('fixed-bottom');
+        }
+
         $('#navigation img').addClass('d-none')
         $('#navigation p').addClass('d-none')
 
@@ -28,6 +40,11 @@ $(function () {
             $('#navigation').addClass('fixed-bottom')
             $('#text').addClass('desktop')
             $('#text').css('height', ($(window).height() - $('#navigation').outerHeight(true)) + 'px')
+            
+            // Extra step for IE11 - force repaint for fixed-bottom
+            if (isIE11) {
+                $('#navigation').css({position: 'fixed', bottom: '0'});
+            }
         }
 
         if ($(window).width() < 576) {
@@ -50,13 +67,21 @@ $(function () {
         }
     }
 
+    // Run resize immediately on script load
+    windowResized();
+
     $(window).on('load', function () {
-        windowResized()
+        windowResized();
+        
+        // For IE11 and other problematic browsers, add extra resize calls
+        if (isIE11) {
+            setTimeout(windowResized, 100);
+            setTimeout(windowResized, 500);
+        }
     })
 
     $(window).on('resize', function () {
         clearTimeout(doit)
-
         doit = setTimeout(windowResized, 100)
     })
 })

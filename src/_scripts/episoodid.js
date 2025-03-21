@@ -11,8 +11,23 @@ const episodes = []
 // Helper function to trigger window resize
 const triggerWindowResize = () => {
     setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
-        console.log('Window resize event triggered');
+        try {
+            // Use CustomEvent for better IE11 compatibility
+            const resizeEvent = typeof CustomEvent === 'function' ? 
+                new CustomEvent('resize') : new Event('resize');
+            window.dispatchEvent(resizeEvent);
+            console.log('Window resize event triggered');
+        } catch (e) {
+            // Fallback for very old browsers
+            if (typeof window.dispatchEvent === 'function') {
+                var evt = document.createEvent('UIEvents');
+                evt.initUIEvent('resize', true, false, window, 0);
+                window.dispatchEvent(evt);
+            } else if (typeof window.fireEvent === 'function') {
+                window.fireEvent('onresize');
+            }
+            console.log('Window resize event triggered (fallback)');
+        }
     }, 100);
 }
 

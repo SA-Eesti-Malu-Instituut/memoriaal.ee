@@ -105,6 +105,20 @@ if (typeof Promise === 'undefined') {
 // Helper function to check if we're running in IE11
 window.isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
+// Event constructor polyfill for IE11
+(function() {
+  if (typeof window.CustomEvent === "function") return false;
+  
+  function CustomEvent(event, params) {
+    params = params || { bubbles: false, cancelable: false, detail: null };
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+    return evt;
+  }
+  
+  window.CustomEvent = CustomEvent;
+})();
+
 // Add try-catch for navigator.clipboard API used in script.js
 if (window.isIE11) {
   // Create a mock clipboard API for IE11
@@ -127,4 +141,57 @@ if (window.isIE11 && typeof console !== 'undefined') {
       oldLog.apply(console, arguments);
     }
   };
-} 
+}
+
+// Improve resize handling in IE11
+document.addEventListener('DOMContentLoaded', function() {
+  // Function to force multiple resize events for IE11
+  function triggerIE11Resize() {
+    if (window.isIE11) {
+      // IE11 needs multiple resize events with different delays to properly render fixed elements
+      setTimeout(function() {
+        window.dispatchEvent(new CustomEvent('resize'));
+      }, 10);
+      
+      setTimeout(function() {
+        window.dispatchEvent(new CustomEvent('resize'));
+      }, 100);
+      
+      setTimeout(function() {
+        window.dispatchEvent(new CustomEvent('resize'));
+      }, 500);
+      
+      // Final resize after all content should be loaded
+      setTimeout(function() {
+        window.dispatchEvent(new CustomEvent('resize'));
+      }, 1000);
+    }
+  }
+  
+  // Trigger on DOMContentLoaded
+  triggerIE11Resize();
+  
+  // Also trigger on window load when all resources are fully loaded
+  window.addEventListener('load', function() {
+    triggerIE11Resize();
+  });
+  
+  // For fixed bottom elements specifically
+  var fixedElements = document.querySelectorAll('.fixed-bottom');
+  if (fixedElements.length > 0 && window.isIE11) {
+    // Additional fix specifically for fixed-bottom elements in IE11
+    setTimeout(function() {
+      for (var i = 0; i < fixedElements.length; i++) {
+        // Force a reflow by accessing the offsetHeight property
+        var force = fixedElements[i].offsetHeight;
+        // Temporarily toggle the display to force a repaint
+        var currentDisplay = fixedElements[i].style.display;
+        fixedElements[i].style.display = 'none';
+        // Force a reflow/repaint
+        var force2 = fixedElements[i].offsetHeight;
+        fixedElements[i].style.display = currentDisplay;
+      }
+      window.dispatchEvent(new CustomEvent('resize'));
+    }, 300);
+  }
+}); 
