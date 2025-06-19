@@ -14,7 +14,10 @@
                 .row
                     #text-text.col.py-3
                         each c, idx in self.content
-                            if c.id
+                            if c.class === 'notice'
+                                .notice-block(class={ 'mb-3': idx!==self.content.length-1, 'mb-0': idx===self.content.length-1 })
+                                    +markdown(c.text)
+                            else if c.id
                                 a.text-link.py-2.d-block(href='#' + c.id)= c.title
                                 .text-block.d-none(id=c.id, class={ 'mb-3': idx!==self.content.length-1, 'mb-0': idx===self.content.length-1 })
                                     +markdown(c.text)
