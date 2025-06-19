@@ -1,0 +1,15 @@
+# Ensure shell scripts use LF
+*.sh text eol=lf
+
+# Ensure config and dotfiles use LF
+*.toml text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.nvmrc text eol=lf
+*.node-version text eol=lf
+*.js   text eol=lf
+*.ts   text eol=lf
+*.py   text eol=lf
+*.html text eol=lf
+*.css  text eol=lf
