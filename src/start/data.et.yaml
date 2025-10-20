@@ -31,11 +31,4 @@ content:
                 5.1. olemasolevate andmete kohaselt osalesid genotsiidis, inimsusvastastes kuritegudes või sõjakuritegudes;
                 5.2. olid NSV Liidu kommunistliku partei liikmed enne 1954. aastat, repressiivorganite töötajad või hävituspataljoni liikmed.
 
-    -
-        id: renovation-notice
-        class: notice
-        text: |
-            <div style="border: 1px solid rgba(255, 255, 255, 0.3); padding: 1rem; margin-top: 1rem; background-color: rgba(255, 255, 255, 0.05);">
-            <strong>Seoses remonttöödega on memoriaali Pirita tee poolne teekonna osa suletud perioodil 30.06 – 31.07.2025.</strong> Teekonda saab osaliselt külastada Lepa tn poolt.<br>
-            Vabandame ebamugavuste eest!
-            </div>
+
