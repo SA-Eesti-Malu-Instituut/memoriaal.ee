@@ -1,6 +1,9 @@
 [build]
   functions = "netlify/functions/"
 
+[build.environment]
+  NETLIFY_USE_UBUNTU_22_04 = "true"
+
 [[redirects]]
   from = "/episoodid.js"
   to = "/.netlify/functions/serve-episoodid"
