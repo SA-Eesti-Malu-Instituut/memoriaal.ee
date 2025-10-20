@@ -30,12 +30,3 @@ content:
             5. The Memorial does not include the data of those victims of communism who:
                 5.1. according to known data participated in genocide, crimes against humanity, or war crimes;
                 5.2. were members of the Communist Party of the Soviet Union before 1954, staff members of repressive organisations, or members of destruction battalions.
-
-    -
-        id: renovation-notice
-        class: notice
-        text: |
-            <div style="border: 1px solid rgba(255, 255, 255, 0.3); padding: 1rem; margin-top: 1rem; background-color: rgba(255, 255, 255, 0.05);">
-            <strong>Due to renovation works, the part of the memorial path on the Pirita Road side will be closed during the period 30.06 – 31.07.2025.</strong> The path can be partially accessed from Lepa Street.<br>
-            We apologize for the inconvenience!
-            </div>
