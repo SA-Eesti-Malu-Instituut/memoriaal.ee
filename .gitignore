@@ -2,5 +2,6 @@ dist
 node_modules
 package-lock.json
 docs/.DS_Store
+docs/todo
 .DS_Store
 ..DS_Store
