@@ -1,15 +1,24 @@
 title: Baas
+description: Kommunismiohvrite andmebaas sisaldab andmeid Eesti elanike kohta, kes kannatasid Nõukogude repressioonide all aastatel 1940–1991.
 pictures:
     - /images/bg/andmebaas.jpg
 q:
     episood_elukoht: Elukoht
-    episood_vangilaager: Vangilaager
     eesnimi: Eesnimi
     perenimi: Perenimi
     isanimi: Isanimi
     emanimi: Emanimi
     synniaeg: Sünniaeg
+    synnikoht: Sünnikoht
     surmaaeg: Surmaaeg
+
+pagination:
+    showing: Näitan
+    of: kirjest
+    loadMore: Lae veel tulemusi
+    loading: Laen...
+    allLoaded: Kõik tulemused laetud
+    noResults: Tulemusi ei leitud
 
 result:
     title: Otsing kommunismiohvrite andmebaasist
@@ -46,5 +55,8 @@ feedback:
     feedback: Kõikvõimalik muu info
 
     submit: Saada tagasiside
+    sending: Saadan...
     cancel: Tühista
     success: Täname tagasiside eest
+    error: Tagasiside saatmine ebaõnnestus. Palun proovige uuesti.
+    emailRequired: Palun sisestage e-posti aadress

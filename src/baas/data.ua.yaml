@@ -1,17 +1,24 @@
 language: ukrainian
-path: search
+path: baas
 title: Пошук
 pictures:
     - /images/bg/andmebaas.jpg
 q:
     episood_elukoht:
-    episood_vangilaager:
     eesnimi: Ім'я
     perenimi: Прізвище
     isanimi: Ім'я батька
     emanimi: Ім'я матері
     synniaeg: Дата народження
     surmaaeg: Дата смерті
+
+pagination:
+    showing: Показано
+    of: з
+    loadMore: Завантажити ще
+    loading: Завантаження...
+    allLoaded: Усі результати завантажено
+    noResults: Результатів не знайдено
 
 result:
     title: Пошук у базі даних жертв комунізму

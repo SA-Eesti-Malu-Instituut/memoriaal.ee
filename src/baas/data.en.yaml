@@ -1,16 +1,25 @@
-path: search
-title: Search
+path: baas
+title: Database
+description: The database of victims of communism contains records of Estonian residents who suffered under Soviet repressions during 1940–1991.
 pictures:
     - /images/bg/andmebaas.jpg
 q:
     episood_elukoht: Place of residence
-    episood_vangilaager: Prison camp
     eesnimi: First name
     perenimi: Last name
     isanimi: Father's name
     emanimi: Mother's name
     synniaeg: Date of birth
+    synnikoht: Place of birth
     surmaaeg: Date of death
+
+pagination:
+    showing: Showing
+    of: of
+    loadMore: Load more results
+    loading: Loading...
+    allLoaded: All results loaded
+    noResults: No results found
 
 result:
     title: Search in the database of victims of communism
@@ -45,5 +54,8 @@ feedback:
     feedback: Feedback
 
     submit: Send feedback
+    sending: Sending...
     cancel: Cancel
     success: Thank You!
+    error: Failed to send feedback. Please try again.
+    emailRequired: Please enter an email address

@@ -3,21 +3,25 @@ extends /_templates/baas_layout.pug
 
 block content
     #search.col-12
-        h3.mb-3= self.title
-        form#searchForm.form.row(action='/baas/', method='GET')
+        .baas-header
+            h3.mb-1= self.title
+            .lang-toggle
+                a.lang-toggle-btn(href='/baas/', class=(self.locale === 'et' ? 'active' : '')) Eesti
+                a.lang-toggle-btn(href='/en/baas/', class=(self.locale === 'en' ? 'active' : '')) English
+        if self.description
+            p.baas-description.mb-3= self.description
+        form#searchForm.form.row(action=(self.locale === 'et' ? '/baas/' : '/en/baas/'), method='GET')
             .col-12
-                input#mainSearchInput.emem-text-input.col-lg-10.col-md-7.col-sm-8(type='search', name='q', placeholder=self.search.placeholder)
-                button#mainSearchButton.col-lg-2.col-md-5.col-sm-4(
+                input#mainSearchInput.emem-text-input.col-lg-8.col-md-6.col-sm-6(type='search', name='q', placeholder=self.search.placeholder)
+                button#mainSearchButton.col-lg-2.col-md-3.col-sm-3(
                     type='submit',
                     onclick='return submitForm(event)'
                 )= self.search.button
+                button#clearSearchButton(
+                    type='button',
+                    onclick='clearForm(event)'
+                )= self.search.clear
             #episoodifilter.form-check.col-lg-8.col-md-6.col-sm-12
-                .form-check.col-md-12.my-2
-                    label.form-check-label.col-4.padding= ' '
-                    button#clearSearchButton.col-8(
-                        type='button',
-                        onclick='clearForm(event)'
-                    )= self.search.clear
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qForename')= self.q.eesnimi
                     input.form-check-input.emem-text-input.col-8(type='search', id='qForename', name='fn', placeholder=self.q.eesnimi)
@@ -25,18 +29,283 @@ block content
                     label.form-check-label.col-4.padding(for='qSurname')= self.q.perenimi
                     input.form-check-input.emem-text-input.col-8(type='search', id='qSurname', name='sn', placeholder=self.q.perenimi)
                 .form-check.col-md-12.my-2
+                    label.form-check-label.col-4.padding(for='qBirthdate')= self.q.synniaeg
+                    input.form-check-input.emem-text-input.col-8(type='search', id='qBirthdate', name='bd', placeholder=self.q.synniaeg)
+                .form-check.col-md-12.my-2
+                    label.form-check-label.col-4.padding(for='qBirthplace')= self.q.synnikoht
+                    input.form-check-input.emem-text-input.col-8(type='search', id='qBirthplace', name='bp', placeholder=self.q.synnikoht)
+                .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qFather')= self.q.isanimi
                     input.form-check-input.emem-text-input.col-8(type='search', id='qFather', name='ftn', placeholder=self.q.isanimi)
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qMother')= self.q.emanimi
                     input.form-check-input.emem-text-input.col-8(type='search', id='qMother', name='mtn', placeholder=self.q.emanimi)
                 hr
-                .form-check.col-md-12.my-2
+                .form-check.col-md-12.my-2.elukoht-row
                     label.form-check-label.col-4.padding(for='episoodElukoht')= self.q.episood_elukoht
-                    input.form-check-input.emem-text-input.col-8(type='search', id='episoodElukoht', name='ee', placeholder=self.q.episood_elukoht, value='')
-                .form-check.col-md-12.my-2
-                    label.form-check-label.col-4.padding(for='episoodVangilaager')= self.q.episood_vangilaager
-                    input.form-check-input.emem-text-input.col-8(type='search', id='episoodVangilaager', name='ev', placeholder=self.q.episood_vangilaager, value='')
+                    .elukoht-autocomplete.col-8
+                        input.form-check-input.emem-text-input(type='search', id='episoodElukoht', name='ee', placeholder=self.q.episood_elukoht, value='', autocomplete='off')
+                        #elukohtSuggestions.autocomplete-suggestions.d-none
+                datalist#elukohtList
+                    option(value='Aakre vald' data-key='AAKRE V')
+                    option(value='Aaspere vald' data-key='AASPERE V')
+                    option(value='Abja vald' data-key='ABJA V')
+                    option(value='Ahja vald' data-key='AHJA V')
+                    option(value='Alatskivi vald' data-key='ALATSKIVI V')
+                    option(value='Albu vald' data-key='ALBU V')
+                    option(value='Alutaguse vald' data-key='ALUTAGUSE V')
+                    option(value='Ambla vald' data-key='AMBLA V')
+                    option(value='Anija vald' data-key='ANIJA V')
+                    option(value='Antsla vald' data-key='ANTSLA V')
+                    option(value='Are vald' data-key='ARE V')
+                    option(value='Assamalla vald' data-key='ASSAMALLA V')
+                    option(value='Asuküla vald' data-key='ASUKÜLA V')
+                    option(value='Audru vald' data-key='AUDRU V')
+                    option(value='Avanduse vald' data-key='AVANDUSE V')
+                    option(value='Avinurme vald' data-key='AVINURME V')
+                    option(value='Elva linn' data-key='ELVA L')
+                    option(value='Elva vald' data-key='ELVA V')
+                    option(value='Emmaste vald' data-key='EMMASTE V')
+                    option(value='Erra vald' data-key='ERRA V')
+                    option(value='Haanja vald' data-key='HAANJA V')
+                    option(value='Haapsalu linn' data-key='HAAPSALU L')
+                    option(value='Hageri vald' data-key='HAGERI V')
+                    option(value='Halinga vald' data-key='HALINGA V')
+                    option(value='Haljala vald' data-key='HALJALA V')
+                    option(value='Harku vald' data-key='HARKU V')
+                    option(value='Helme vald' data-key='HELME V')
+                    option(value='Holstre vald' data-key='HOLSTRE V')
+                    option(value='Hummuli vald' data-key='HUMMULI V')
+                    option(value='Häädemeeste vald' data-key='HÄÄDEMEESTE V')
+                    option(value='Iru vald' data-key='IRU V')
+                    option(value='Juuru vald' data-key='JUURU V')
+                    option(value='Järvakandi vald' data-key='JÄRVAKANDI V')
+                    option(value='Järvesuu vald' data-key='JÄRVESUU V')
+                    option(value='Jõelähtme vald' data-key='JÕELÄHTME V')
+                    option(value='Jõgeva linn' data-key='JÕGEVA L')
+                    option(value='Jõgeva vald' data-key='JÕGEVA V')
+                    option(value='Kaagjärve vald' data-key='KAAGJÄRVE V')
+                    option(value='Kaarepere vald' data-key='KAAREPERE V')
+                    option(value='Kaarma vald' data-key='KAARMA V')
+                    option(value='Kabala vald' data-key='KABALA V')
+                    option(value='Kaisma vald' data-key='KAISMA V')
+                    option(value='Kalda vald' data-key='KALDA V')
+                    option(value='Kallaste linn' data-key='KALLASTE L')
+                    option(value='Kalvi-Mahu vald' data-key='KALVI-MAHU V')
+                    option(value='Kambja vald' data-key='KAMBJA V')
+                    option(value='Kanepi vald' data-key='KANEPI V')
+                    option(value='Kareda vald' data-key='KAREDA V')
+                    option(value='Karksi vald' data-key='KARKSI V')
+                    option(value='Karula vald' data-key='KARULA V')
+                    option(value='Karuse vald' data-key='KARUSE V')
+                    option(value='Kasaritsa vald' data-key='KASARITSA V')
+                    option(value='Kasepää vald' data-key='KASEPÄÄ V')
+                    option(value='Kavastu vald' data-key='KAVASTU V')
+                    option(value='Kehtna vald' data-key='KEHTNA V')
+                    option(value='Keila linn' data-key='KEILA L')
+                    option(value='Keila vald' data-key='KEILA V')
+                    option(value='Kernu vald' data-key='KERNU V')
+                    option(value='Kihelkonna vald' data-key='KIHELKONNA V')
+                    option(value='Kihnu vald' data-key='KIHNU V')
+                    option(value='Kiidjärve vald' data-key='KIIDJÄRVE V')
+                    option(value='Kilingi-Nõmme linn' data-key='KILINGI-NÕMME L')
+                    option(value='Kirbla vald' data-key='KIRBLA V')
+                    option(value='Kohila vald' data-key='KOHILA V')
+                    option(value='Koigi vald' data-key='KOIGI V')
+                    option(value='Kolga vald' data-key='KOLGA V')
+                    option(value='Konguta vald' data-key='KONGUTA V')
+                    option(value='Kooraste vald' data-key='KOORASTE V')
+                    option(value='Kudina vald' data-key='KUDINA V')
+                    option(value='Kuigatsi vald' data-key='KUIGATSI V')
+                    option(value='Kuimetsa vald' data-key='KUIMETSA V')
+                    option(value='Kuivajõe vald' data-key='KUIVAJÕE V')
+                    option(value='Kullamaa vald' data-key='KULLAMAA V')
+                    option(value='Kunda linn' data-key='KUNDA L')
+                    option(value='Kunda vald' data-key='KUNDA V')
+                    option(value='Kuremaa vald' data-key='KUREMAA V')
+                    option(value='Kuressaare linn' data-key='KURESSAARE L')
+                    option(value='Kuressaare vald' data-key='KURESSAARE V')
+                    option(value='Kuusalu vald' data-key='KUUSALU V')
+                    option(value='Kuuste vald' data-key='KUUSTE V')
+                    option(value='Käina vald' data-key='KÄINA V')
+                    option(value='Kärdla linn' data-key='KÄRDLA L')
+                    option(value='Kärla vald' data-key='KÄRLA V')
+                    option(value='Käru vald' data-key='KÄRU V')
+                    option(value='Kõlleste vald' data-key='KÕLLESTE V')
+                    option(value='Kõnnu vald' data-key='KÕNNU V')
+                    option(value='Kõo vald' data-key='KÕO V')
+                    option(value='Kõpu vald' data-key='KÕPU V')
+                    option(value='Kõrgesaare vald' data-key='KÕRGESAARE V')
+                    option(value='Kõue vald' data-key='KÕUE V')
+                    option(value='Küti vald' data-key='KÜTI V')
+                    option(value='Laeva vald' data-key='LAEVA V')
+                    option(value='Laheda vald' data-key='LAHEDA V')
+                    option(value='Laiksaare vald' data-key='LAIKSAARE V')
+                    option(value='Laimjala vald' data-key='LAIMJALA V')
+                    option(value='Laiuse vald' data-key='LAIUSE V')
+                    option(value='Lasva vald' data-key='LASVA V')
+                    option(value='Leevi vald' data-key='LEEVI V')
+                    option(value='Lehtse vald' data-key='LEHTSE V')
+                    option(value='Leisi vald' data-key='LEISI V')
+                    option(value='Lelle vald' data-key='LELLE V')
+                    option(value='Lepistu vald' data-key='LEPISTU V')
+                    option(value='Lihula vald' data-key='LIHULA V')
+                    option(value='Linnamäe vald' data-key='LINNAMÄE V')
+                    option(value='Linnuse vald' data-key='LINNUSE V')
+                    option(value='Lohusuu vald' data-key='LOHUSUU V')
+                    option(value='Lustivere vald' data-key='LUSTIVERE V')
+                    option(value='Luunja vald' data-key='LUUNJA V')
+                    option(value='Lüganuse vald' data-key='LÜGANUSE V')
+                    option(value='Lümanda vald' data-key='LÜMANDA V')
+                    option(value='Maidla vald' data-key='MAIDLA V')
+                    option(value='Martna vald' data-key='MARTNA V')
+                    option(value='Meeksi vald' data-key='MEEKSI V')
+                    option(value='Meremäe vald' data-key='MEREMÄE V')
+                    option(value='Misso vald' data-key='MISSO V')
+                    option(value='Mooste vald' data-key='MOOSTE V')
+                    option(value='Muhu vald' data-key='MUHU V')
+                    option(value='Mustjala vald' data-key='MUSTJALA V')
+                    option(value='Mustla linn' data-key='MUSTLA L')
+                    option(value='Mustvee linn' data-key='MUSTVEE L')
+                    option(value='Mäe vald' data-key='MÄE V')
+                    option(value='Mäksa vald' data-key='MÄKSA V')
+                    option(value='Märjamaa vald' data-key='MÄRJAMAA V')
+                    option(value='Mõisaküla linn' data-key='MÕISAKÜLA L')
+                    option(value='Mõniste vald' data-key='MÕNISTE V')
+                    option(value='Naissaare vald' data-key='NAISSAARE V')
+                    option(value='Narva linn' data-key='NARVA L')
+                    option(value='Narva-Jõesuu linn' data-key='NARVA-JÕESUU L')
+                    option(value='Nissi vald' data-key='NISSI V')
+                    option(value='Noarootsi vald' data-key='NOAROOTSI V')
+                    option(value='Nõmme linn' data-key='NÕMME L')
+                    option(value='Nõo vald' data-key='NÕO V')
+                    option(value='Nõva vald' data-key='NÕVA V')
+                    option(value='Olustvere vald' data-key='OLUSTVERE V')
+                    option(value='Orajõe vald' data-key='ORAJÕE V')
+                    option(value='Orava vald' data-key='ORAVA V')
+                    option(value='Oru vald' data-key='ORU V')
+                    option(value='Otepää linn' data-key='OTEPÄÄ L')
+                    option(value='Otepää vald' data-key='OTEPÄÄ V')
+                    option(value='Paasvere vald' data-key='PAASVERE V')
+                    option(value='Padise vald' data-key='PADISE V')
+                    option(value='Paide linn' data-key='PAIDE L')
+                    option(value='Paide vald' data-key='PAIDE V')
+                    option(value='Paikuse vald' data-key='PAIKUSE V')
+                    option(value='Paistu vald' data-key='PAISTU V')
+                    option(value='Pajusi vald' data-key='PAJUSI V')
+                    option(value='Pakri vald' data-key='PAKRI V')
+                    option(value='Pala vald' data-key='PALA V')
+                    option(value='Paldiski linn' data-key='PALDISKI L')
+                    option(value='Palmse vald' data-key='PALMSE V')
+                    option(value='Peipsiääre vald' data-key='PEIPSIÄÄRE V')
+                    option(value='Peningi vald' data-key='PENINGI V')
+                    option(value='Petseri vald' data-key='PETSERI V')
+                    option(value='Pihtla vald' data-key='PIHTLA V')
+                    option(value='Piirsalu vald' data-key='PIIRSALU V')
+                    option(value='Prangli vald' data-key='PRANGLI V')
+                    option(value='Puhja vald' data-key='PUHJA V')
+                    option(value='Puurmani vald' data-key='PUURMANI V')
+                    option(value='Pärnu linn' data-key='PÄRNU L')
+                    option(value='Pärsamaa vald' data-key='PÄRSAMAA V')
+                    option(value='Põltsamaa linn' data-key='PÕLTSAMAA L')
+                    option(value='Põltsamaa vald' data-key='PÕLTSAMAA V')
+                    option(value='Põlva vald' data-key='PÕLVA V')
+                    option(value='Pöide vald' data-key='PÖIDE V')
+                    option(value='Pühajärve vald' data-key='PÜHAJÄRVE V')
+                    option(value='Pühalepa vald' data-key='PÜHALEPA V')
+                    option(value='Raasiku vald' data-key='RAASIKU V')
+                    option(value='Rae vald' data-key='RAE V')
+                    option(value='Raikküla vald' data-key='RAIKKÜLA V')
+                    option(value='Rajangu vald' data-key='RAJANGU V')
+                    option(value='Rakke vald' data-key='RAKKE V')
+                    option(value='Rakvere linn' data-key='RAKVERE L')
+                    option(value='Rakvere vald' data-key='RAKVERE V')
+                    option(value='Rannu vald' data-key='RANNU V')
+                    option(value='Rapla vald' data-key='RAPLA V')
+                    option(value='Raudna vald' data-key='RAUDNA V')
+                    option(value='Ravila vald' data-key='RAVILA V')
+                    option(value='Ridala vald' data-key='RIDALA V')
+                    option(value='Riguldi vald' data-key='RIGULDI V')
+                    option(value='Rimmu vald' data-key='RIMMU V')
+                    option(value='Roodva vald' data-key='ROODVA V')
+                    option(value='Ropka vald' data-key='ROPKA V')
+                    option(value='Rägavere vald' data-key='RÄGAVERE V')
+                    option(value='Räpina vald' data-key='RÄPINA V')
+                    option(value='Rõngu vald' data-key='RÕNGU V')
+                    option(value='Rõuge vald' data-key='RÕUGE V')
+                    option(value='Saadjärve vald' data-key='SAADJÄRVE V')
+                    option(value='Saarde vald' data-key='SAARDE V')
+                    option(value='Saare vald' data-key='SAARE V')
+                    option(value='Saatse vald' data-key='SAATSE V')
+                    option(value='Sadala vald' data-key='SADALA V')
+                    option(value='Salla vald' data-key='SALLA V')
+                    option(value='Sangaste vald' data-key='SANGASTE V')
+                    option(value='Saue vald' data-key='SAUE V')
+                    option(value='Sauga vald' data-key='SAUGA V')
+                    option(value='Seliste vald' data-key='SELISTE V')
+                    option(value='Sindi linn' data-key='SINDI L')
+                    option(value='Soontaga vald' data-key='SOONTAGA V')
+                    option(value='Suislepa vald' data-key='SUISLEPA V')
+                    option(value='Suure-Jaani linn' data-key='SUURE-JAANI L')
+                    option(value='Särevere vald' data-key='SÄREVERE V')
+                    option(value='Sõmerpalu vald' data-key='SÕMERPALU V')
+                    option(value='Sõmeru vald' data-key='SÕMERU V')
+                    option(value='Taebla vald' data-key='TAEBLA V')
+                    option(value='Taevere vald' data-key='TAEVERE V')
+                    option(value='Taheva vald' data-key='TAHEVA V')
+                    option(value='Tahkuranna vald' data-key='TAHKURANNA V')
+                    option(value='Tali vald' data-key='TALI V')
+                    option(value='Tallinn linn' data-key='TALLINN L')
+                    option(value='Tallinnajuudid linn' data-key='TALLINNAJUUDID L')
+                    option(value='Tapa linn' data-key='TAPA L')
+                    option(value='Tartu linn' data-key='TARTU L')
+                    option(value='Tartu vald' data-key='TARTU V')
+                    option(value='Tarvastu vald' data-key='TARVASTU V')
+                    option(value='Tihemetsa vald' data-key='TIHEMETSA V')
+                    option(value='Tori vald' data-key='TORI V')
+                    option(value='Torma vald' data-key='TORMA V')
+                    option(value='Tuhalaane vald' data-key='TUHALAANE V')
+                    option(value='Tähtvere vald' data-key='TÄHTVERE V')
+                    option(value='Tänassilma vald' data-key='TÄNASSILMA V')
+                    option(value='Tõdva vald' data-key='TÕDVA V')
+                    option(value='Tõlliste vald' data-key='TÕLLISTE V')
+                    option(value='Tõrva linn' data-key='TÕRVA L')
+                    option(value='Tõstamaa vald' data-key='TÕSTAMAA V')
+                    option(value='Türi linn' data-key='TÜRI L')
+                    option(value='Undla vald' data-key='UNDLA V')
+                    option(value='Vaimastvere vald' data-key='VAIMASTVERE V')
+                    option(value='Vaivara vald' data-key='VAIVARA V')
+                    option(value='Vajangu vald' data-key='VAJANGU V')
+                    option(value='Valga linn' data-key='VALGA L')
+                    option(value='Valgjärve vald' data-key='VALGJÄRVE V')
+                    option(value='Valjala vald' data-key='VALJALA V')
+                    option(value='Vao vald' data-key='VAO V')
+                    option(value='Vaoküla vald' data-key='VAOKÜLA V')
+                    option(value='Vara vald' data-key='VARA V')
+                    option(value='Varbla vald' data-key='VARBLA V')
+                    option(value='Varbola vald' data-key='VARBOLA V')
+                    option(value='Varstu vald' data-key='VARSTU V')
+                    option(value='Vasknarva vald' data-key='VASKNARVA V')
+                    option(value='Vastemõisa vald' data-key='VASTEMÕISA V')
+                    option(value='Vastseliina vald' data-key='VASTSELIINA V')
+                    option(value='Velise vald' data-key='VELISE V')
+                    option(value='Veriora vald' data-key='VERIORA V')
+                    option(value='Vigala vald' data-key='VIGALA V')
+                    option(value='Vihula vald' data-key='VIHULA V')
+                    option(value='Viljandi linn' data-key='VILJANDI L')
+                    option(value='Viljandi vald' data-key='VILJANDI V')
+                    option(value='Vilo vald' data-key='VILO V')
+                    option(value='Viru-Roela vald' data-key='VIRU-ROELA V')
+                    option(value='Vohnja vald' data-key='VOHNJA V')
+                    option(value='Voore-Roela vald' data-key='VOORE-ROELA V')
+                    option(value='Vormsi vald' data-key='VORMSI V')
+                    option(value='Väinjärve vald' data-key='VÄINJÄRVE V')
+                    option(value='Vändra vald' data-key='VÄNDRA V')
+                    option(value='Väätsa vald' data-key='VÄÄTSA V')
+                    option(value='Võhmuta vald' data-key='VÕHMUTA V')
+                    option(value='Võisiku vald' data-key='VÕISIKU V')
+                    option(value='Võru vald' data-key='VÕRU V')
+                    option(value='Äksi vald' data-key='ÄKSI V')
             .form-check.col-lg-4.col-md-6.col-sm-12
                 .form-check.col-12.my-2
                     input.form-check-input(type='radio', id='filter_'+self.search.radio.all, name='f', value='all')
@@ -58,9 +327,12 @@ block content
                     label.form-check-label(for='filter_'+self.search.radio.mv)= self.search.radio.mv
                 .form-check.col-12.my-2
                     input.form-check-input(type='radio', id='filter_'+self.search.radio.none, name='f', value='none')
-                    label.form-check-label(for='filter_'+self.search.radio.none)= self.search.radio.none
+                    label.form-check-label(for='filter_'+self.search.radio.none)= self.search.radio.none || 'nonrelevant'
         p#search-count.mt-2.mb-4
         #search-results
+        #pagination.text-center.mt-3.d-none
+            button#load-more.btn.btn-primary= self.pagination.loadMore
+            p#pagination-status.mt-2
 
     #popup-background.d-none
     #popup-content.p-3.d-none
@@ -69,7 +341,7 @@ block content
             #db-feedback-text.col-12.col-md-10.offset-md-1
                 +markdown(self.feedback.text)
 
-            form#db-feedback.col-12.col-md-8.offset-md-2(name='db-feedback2', method='POST', netlify-honeypot='fax', netlify)
+            form#db-feedback.col-12.col-md-8.offset-md-2(name='db-feedback2')
                 .form-group.mt-5
                     label.form-label.col-12.px-0(for='db-feedback2-email'
                         )= self.feedback.email
@@ -124,9 +396,17 @@ block content
                     button#db-feedback-submit.btn.btn-primary.ml-3(type='submit')= self.feedback.submit
 
             h2#db-feedback-success.col-12.d-none= self.feedback.success
+            p#db-feedback-error.col-12.d-none.text-danger= self.feedback.error
 
 block script
     script.
+        const PAGE_SIZE = 200
+        let totalCount = 0
+        let loadedCount = 0
+        let isLoading = false
+        let searchQData = null
+        let isIdSearchQuery = false
+
         const removeEmptyValues = (form) => {
             const inputs = form.getElementsByTagName('input')
             let preventSubmit = true
@@ -134,10 +414,8 @@ block script
                 const input = inputs[i]
                 if (input.type === 'radio') { continue }
                 if (input.value === '') {
-                    //- console.log('removing empty value', input.name)
                     input.name = ''
                 } else {
-                    //- console.log('not removing empty value', input.name)
                     preventSubmit = false
                 }
             }
@@ -159,34 +437,293 @@ block script
                 if (input.type === 'radio') { continue }
                 input.value = ''
             }
-            // clean the url
             const url = window.location.href
             const cleanUrl = url.split('?')[0]
             window.history.replaceState({}, '', cleanUrl)
+        }
+
+        function renderHits(hits) {
+            for (var i = 0; i < hits.length; i++) {
+                var text = []
+                var p = hits[i]._source
+
+                if (p.redirect) { continue }
+
+                let c3class = (p.emem||p.kivi||p.evo||p.wwii === 1 ? 'relevantne' : 'mitterelevantne')
+                if (p.isperson === 0) { c3class = 'nonperson' }
+
+                text.push('<div id="' + p.id + '" class="search-result pt-2 pb-4 ' + c3class + '">')
+                text.push('<div class="labels">')
+                if (p.kivi) { text.push('<span class="kivi">kivi</span>') }
+                if (p.emem) { text.push('<span class="emem">emem</span>') }
+                if (p.evo) { text.push('<span class="evo">EVO</span>') }
+                if (p.wwii) { text.push('<span class="refugee">refugee</span>') }
+                if (p.mv) { text.push('<span class="mv">MV</span>') }
+                text.push('</div>')
+                text.push('<div class="row">')
+
+                text.push('<h3 class="search-result-name col-12 mb-2 mb-1">' + (p.eesnimi ? p.eesnimi : '') + ' ' + p.perenimi
+                    + ' <a href="https://www.google.com/search?q=%22' + p.eesnimi + '%20' + p.perenimi + '%22" target="_blank" class="google-search"><i class="fas fa-search">G</i></a>'
+                    + '</h3>')
+
+                text.push('<div class="col-5 col-sm-3">')
+                if (p.sünd) {
+                    text.push('<p class="mb-0">#{self.result.born}: ' + p.sünd)
+                    if (p.sünnikoht) { text.push('<span> ' + p.sünnikoht + '</span>') }
+                    text.push('</p>')
+                }
+
+                if (p.surm) {
+                    text.push('<p class="mb-0">#{self.result.dead}: ' + p.surm)
+                    if (p.surmakoht) { text.push('<span> ' + p.surmakoht + '</span>') }
+                    text.push('</p>')
+                }
+
+                if (p.isanimi) { text.push('<p class="mb-0">#{self.result.father}: ' + p.isanimi + '</p>') }
+                if (p.emanimi) { text.push('<p class="mb-0">#{self.result.mother}: ' + p.emanimi + '</p>') }
+                let pub_a = pub_b = ''
+                if (p.wwii) {
+                    pub_a = '<a href="https://wwii-refugees.ee/?q=' + p.id + '">'
+                    pub_b = '</a>'
+                }
+                if (p.emem) {
+                    pub_a = '<a href="/baas/?q=' + p.id + '&f=all">'
+                    pub_b = '</a>'
+                }
+                text.push('<p class="mb-0"># ' + pub_a + p.id + pub_b)
+                text.push('<span class="crossfade" clip="' + p.id + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>')
+                text.push('</p>')
+                if (p.updated_at) {
+                    text.push('<hr/>')
+                    text.push('<p class="mb-0" style="font-size:8pt; font-weight:100">' + p.updated_at + '</p>')
+                }
+                text.push('<p class="search-result-feedback mt-3" data-emi_person ="' + p.id + '"data-forename="' + p.eesnimi + '"data-surname="' + p.perenimi + '"data-patronymic="' + p.isanimi + '"data-born="' + p.sünd + '">#{self.feedback.button}</p>')
+                text.push('</div>')
+
+                text.push('<div class="search-result-info col-7 col-sm-6">')
+                p.kirjed = p.kirjed || []
+                for (var ik = 0; ik < p.kirjed.length; ik++) {
+                    const kirje = p.kirjed[ik]
+                    let a1 = a2 = ''
+                    if (kirje.viide) {
+                        a1 = '<a href="' + kirje.viide + '" target="_blank">'
+                        a2 = '</a>'
+                    }
+                    text.push('<p class="mt-2 mb-0"><strong>' + a1 + kirje.allikas + a2 + ' ' + kirje.kirjekood + '<span class="crossfade" clip="' + kirje.kirjekood + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>' + ' </strong></p>')
+                    if (kirje.kirje) {
+                        text.push('<p class="mb-1">')
+                        text.push(replaceLinebreaks(kirje.kirje))
+                        text.push('</p>')
+                    }
+                }
+                if (p.pereseosed && p.pereseosed.length > 0) {
+                    text.push('<div class="pere"><label>Pereliikmed</label>')
+                    for (var ip = 0; ip < p.pereseosed.length; ip++) {
+                        let pereseos = p.pereseosed[ip].seos
+                        if (p.pereseosed[ip].suund === '-1') {
+                            pereseos = '(' + pereseos + ')'
+                        }
+                        let perekirjed = p.pereseosed[ip].kirjed
+                        text.push('<li class="my-0 pereliige"><a href="/baas/?q=' + p.pereseosed[ip].persoon + '&f=all">' + p.pereseosed[ip].persoon + ' ' + pereseos + '</a>')
+                        text.push(' : <span onclick="document.querySelector(\'#perekirjed-' + p.pereseosed[ip].persoon + '\').showModal()">' + p.pereseosed[ip].kirje + '</span>')
+                        text.push('</li>')
+                        text.push('<dialog class="perekirjed" id="perekirjed-' + p.pereseosed[ip].persoon + '">')
+                        text.push('<button class="close" onclick="document.querySelector(\'#perekirjed-' + p.pereseosed[ip].persoon + '\').close()">X</button>')
+                        text.push('<ul class="perekirjed">')
+                        for (var ik = 0; ik < perekirjed.length; ik++) {
+                            text.push('<li class="mb-1">')
+                            text.push(perekirjed[ik].kirjekood + ': ' + replaceLinebreaks(perekirjed[ik].kirje))
+                            text.push('</li>')
+                        }
+                        text.push('</ul>')
+                        text.push('</dialog>')
+                    }
+                    text.push('</div>')
+                }
+                if (p.episoodid && p.episoodid.length > 0) {
+                    text.push('<div class="episoodid"><label>Episoodid</label>')
+                    for (var ie = 0; ie < p.episoodid.length; ie++) {
+                        const episood = p.episoodid[ie]
+                        text.push('<li class="my-0 episood">' + episood.kirjekood)
+                        text.push(' : <span>' + episood.nimetus + '</span>')
+                        if (episood.aeg) { text.push(' <span>' + episood.aeg + '</span>') }
+                        if (episood.asukoht) { text.push(' <span>' + episood.asukoht + '</span>') }
+                        text.push('</li>')
+                    }
+                    text.push('</div>')
+                }
+                text.push('</div>')
+
+                if (p.tahvlikirje) {
+                    text.push('<div class="search-result-plaque' + (p.kivi ? "" : " obsolete") + ' col-12 col-sm-3">')
+                    if (p.tahvlikirje.tahvel) {
+                        text.push('<p class="mb-0">#{self.result.plaque}:</p>')
+                        text.push('<p class="mb-2 plaque-info">' + p.tahvlikirje.tahvel + '</p>')
+                    }
+                    if (p.tahvlikirje.tulp) { text.push('<p class="mb-2">#{self.result.col}: ' + p.tahvlikirje.tulp + ' / #{self.result.row}: ' + p.tahvlikirje.rida + '</p>') }
+                    if (p.tahvlikirje.kirje) {
+                        text.push('<p class="mb-0">#{self.result.nameOnPlaque}: ' + p.tahvlikirje.kirje + '</p>')
+                    }
+                }
+
+                if (p.evo === 1) {
+                    text.push('<hr/><p class="mb-0">#{self.result.nameOnEVOPlaque}: ' + p.evokirje + '</p>')
+                }
+                text.push('</div>')
+                text.push('</div>')
+                text.push('</div>')
+
+                $('#search-results').append(text.join(''))
+            }
+        }
+
+        function updatePaginationUI() {
+            if (totalCount === 0) {
+                $('#pagination').addClass('d-none')
+                $('#search-count').html('#{self.pagination.noResults}')
+                return
+            }
+
+            var countLabel = totalCount === 1 ? ' #{self.result.count.one}' : ' #{self.result.count.multiple}'
+            if (totalCount > loadedCount) {
+                $('#search-count').html('#{self.pagination.showing} 1\u2013' + loadedCount + ' #{self.pagination.of} ' + totalCount + countLabel)
+                $('#pagination').removeClass('d-none')
+                $('#load-more').removeClass('d-none').prop('disabled', false).text('#{self.pagination.loadMore}')
+                $('#pagination-status').text('')
+            } else {
+                $('#search-count').html(totalCount + countLabel)
+                if (totalCount > PAGE_SIZE) {
+                    $('#pagination').removeClass('d-none')
+                    $('#load-more').addClass('d-none')
+                    $('#pagination-status').text('#{self.pagination.allLoaded}')
+                } else {
+                    $('#pagination').addClass('d-none')
+                }
+            }
+        }
+
+        function executeSearch(from) {
+            if (isLoading) return
+            isLoading = true
+
+            if (from > 0) {
+                $('#load-more').prop('disabled', true).text('#{self.pagination.loading}')
+            }
+
+            var payload = JSON.parse(JSON.stringify(searchQData))
+            payload._from = from
+            payload._size = PAGE_SIZE
+
+            $.ajax('/.netlify/functions/baas_search', {
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                type: 'POST',
+                cache: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Basic cmVhZGVyOnJlYWRlcg==')
+                },
+                success: function (data) {
+                    isLoading = false
+                    totalCount = data.hits.total.value
+                    var hits = data.hits.hits
+
+                    if (isIdSearchQuery && hits.length > 0 && hits[0]._source.redirect) {
+                        window.location.href = '?q=' + hits[0]._source.redirect
+                        return
+                    }
+
+                    renderHits(hits)
+                    loadedCount += hits.length
+                    updatePaginationUI()
+
+                    if (typeof triggerResizeAfterSearchUpdate === 'function') {
+                        triggerResizeAfterSearchUpdate()
+                    }
+                },
+                error: function (error) {
+                    isLoading = false
+                    console.log(error)
+                    $('#load-more').prop('disabled', false).text('#{self.pagination.loadMore}')
+                }
+            })
         }
 
         $(function () {
             const query = qs('q') || ''
             let filter = qs('f') || 'all'
 
-            // if query has only empty values (or pnly filter is set), populate it with query params
-
             const qEesnimi = qs('fn')
             const qPerenimi = qs('sn')
+            const qSynniaeg = qs('bd')
+            const qSynnikoht = qs('bp')
             const qIsanimi = qs('ftn')
             const qEmanimi = qs('mtn')
 
             const eElukoht = qs('ee')
-            const eVangilaager = qs('ev')
+
+            // Elukoht datalist mapping helpers
+            function getElukohtKey(value) {
+                if (!value) return value
+                var options = document.querySelectorAll('#elukohtList option')
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].value === value) return options[i].getAttribute('data-key') || value
+                    if (options[i].getAttribute('data-key') === value) return value
+                }
+                return value
+            }
+            function getElukohtNiceName(value) {
+                if (!value) return value
+                var options = document.querySelectorAll('#elukohtList option')
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].getAttribute('data-key') === value) return options[i].value
+                    if (options[i].value === value) return value
+                }
+                return value
+            }
+
+            function getElukohtFilteredSuggestions(value) {
+                var query = (value || '').trim().toLowerCase()
+                if (!query) return []
+                var options = document.querySelectorAll('#elukohtList option')
+                var results = []
+                for (var i = 0; i < options.length; i++) {
+                    var nice = options[i].value || ''
+                    var key = options[i].getAttribute('data-key') || ''
+                    var niceLower = nice.toLowerCase()
+                    var keyLower = key.toLowerCase()
+                    if (niceLower.indexOf(query) !== -1 || keyLower.indexOf(query) !== -1) {
+                        results.push(nice)
+                        if (results.length >= 12) break
+                    }
+                }
+                return results
+            }
+
+            function hideElukohtSuggestions() {
+                $('#elukohtSuggestions').addClass('d-none').empty()
+            }
+
+            function showElukohtSuggestions(value) {
+                var suggestions = getElukohtFilteredSuggestions(value)
+                var $list = $('#elukohtSuggestions')
+                if (!suggestions.length) {
+                    hideElukohtSuggestions()
+                    return
+                }
+                $list.empty()
+                for (var i = 0; i < suggestions.length; i++) {
+                    var item = $('<button type="button" class="autocomplete-option"></button>').text(suggestions[i])
+                    $list.append(item)
+                }
+                $list.removeClass('d-none')
+            }
 
             const isIdQuery = (q) => (q == Number(q) && q.length === 10)
-            console.log(`query: ${query}, filter: ${filter}, episoodElukoht: ${eElukoht}, episoodVangilaager: ${eVangilaager}`)
             const idQuery = isIdQuery(query)
-            console.log(`idQuery: ${idQuery}`)
+            isIdSearchQuery = idQuery
 
             if (idQuery) {
                 filter = 'all'
-                //- $('input[type="radio"]').prop('disabled', true)
             }
 
             $('input[value="'+filter+'"]').prop('checked', true)
@@ -195,13 +732,54 @@ block script
 
             qEesnimi && (document.getElementById('qForename').value = qEesnimi)
             qPerenimi && (document.getElementById('qSurname').value = qPerenimi)
+            qSynniaeg && (document.getElementById('qBirthdate').value = qSynniaeg)
+            qSynnikoht && (document.getElementById('qBirthplace').value = qSynnikoht)
             qIsanimi && (document.getElementById('qFather').value = qIsanimi)
             qEmanimi && (document.getElementById('qMother').value = qEmanimi)
 
-            eElukoht && (document.getElementById('episoodElukoht').value = eElukoht)
-            eVangilaager && (document.getElementById('episoodVangilaager').value = eVangilaager)
+            eElukoht && (document.getElementById('episoodElukoht').value = getElukohtNiceName(eElukoht))
 
-            const multiMatch = {
+            $('#episoodElukoht').on('input', function () {
+                showElukohtSuggestions(this.value)
+            })
+
+            $('#episoodElukoht').on('focus', function () {
+                if (this.value && this.value.trim().length > 0) {
+                    showElukohtSuggestions(this.value)
+                }
+            })
+
+            $('#episoodElukoht').on('blur', function () {
+                setTimeout(function () {
+                    hideElukohtSuggestions()
+                }, 120)
+            })
+
+            $('#elukohtSuggestions').on('mousedown', '.autocomplete-option', function (e) {
+                e.preventDefault()
+                $('#episoodElukoht').val($(this).text())
+                hideElukohtSuggestions()
+            })
+
+            // Wildcard helpers (must be defined before use)
+            const hasWildcard = (value) => {
+                return value && (value.indexOf('*') !== -1 || value.indexOf('%') !== -1)
+            }
+            const normalizeWildcard = (value) => {
+                return value.replace(/%/g, '*')
+            }
+            const isWildcardOnly = (value) => {
+                return value.replace(/[*%]/g, '').trim().length < 2
+            }
+
+            const queryHasWildcard = hasWildcard(query) && !isWildcardOnly(query)
+            const multiMatch = queryHasWildcard ? {
+                query_string: {
+                    query: normalizeWildcard(query),
+                    fields: ['perenimi', 'eesnimi', 'id', 'pereseosed.kirje', 'kirjed.kirje'],
+                    default_operator: 'AND'
+                }
+            } : {
                 multi_match: {
                     query: query,
                     fields: ['perenimi', 'eesnimi', 'id', 'pereseosed.kirje', 'kirjed.kirje'],
@@ -209,7 +787,7 @@ block script
                     type: 'cross_fields'
                 }
             }
-            // optionsA = [ { field: 'nimetus', value: 'Elukoht'}, { field: 'asukoht', value: 'Tallinn'}]
+
             const nestedQ = (nestName, optionsA) => {
                 if (!optionsA) { return {} }
                 if (!Array.isArray(optionsA)) { optionsA = [optionsA] }
@@ -220,9 +798,15 @@ block script
                 for (let i = 0; i < optionsA.length; i++) {
                     const option = optionsA[i]
                     const field = `${nestName}.${option.field}`
-                    const match = {}
-                    match[field] = option.value
-                    must.push({ match })
+                    if (hasWildcard(option.value) && !isWildcardOnly(option.value)) {
+                        const wildcard = {}
+                        wildcard[field] = { value: normalizeWildcard(option.value).toLowerCase(), case_insensitive: true }
+                        must.push({ wildcard })
+                    } else {
+                        const match = {}
+                        match[field] = option.value
+                        must.push({ match })
+                    }
                 }
                 return {
                     nested: {
@@ -233,6 +817,17 @@ block script
             }
 
             const matchQ = (field, value) => {
+                if (hasWildcard(value)) {
+                    if (isWildcardOnly(value)) {
+                        // Fall back to regular match if wildcard-only or too short
+                        const match = {}
+                        match[field] = { query: value.replace(/[*%]/g, '') }
+                        return { match }
+                    }
+                    const wildcard = {}
+                    wildcard[field] = { value: normalizeWildcard(value).toLowerCase(), case_insensitive: true }
+                    return { wildcard }
+                }
                 const match = {}
                 match[field] = { query: value }
                 return { match }
@@ -256,21 +851,25 @@ block script
             }
 
             if (idQuery) {
-                console.log('idQuery')
                 filter = 'all'
                 multiMatch['multi_match']['fields'] = ['id']
                 qData['query']['bool']['must'].push(multiMatch)
-            } else {  // filter out results with redirect = ''
+            } else {
                 if (query.length > 0) {
                     qData['query']['bool']['must'].push(multiMatch)
                 }
                 qData['query']['bool']['must_not'] = { term: { redirect: '' } }
-                // Täppisotsingut teostame ainult siis, kui ei otsita ID järgi
                 if (qs('fn')) {
                     qData['query']['bool']['must'].push(matchQ('eesnimi', qs('fn')))
                 }
                 if (qs('sn')) {
                     qData['query']['bool']['must'].push(matchQ('perenimi', qs('sn')))
+                }
+                if (qs('bd')) {
+                    qData['query']['bool']['must'].push(matchQ('sünd', qs('bd')))
+                }
+                if (qs('bp')) {
+                    qData['query']['bool']['must'].push(matchQ('sünnikoht', qs('bp')))
                 }
                 if (qs('ftn')) {
                     qData['query']['bool']['must'].push(matchQ('isanimi', qs('ftn')))
@@ -282,13 +881,7 @@ block script
                 if (qs('ee')) {
                     qData['query']['bool']['must'].push(nestedQ('episoodid', [
                         { field: 'nimetus', value: 'Elukoht' },
-                        { field: 'asukoht', value: qs('ee') },
-                    ]))
-                }
-                if (qs('ev')) {
-                    qData['query']['bool']['must'].push(nestedQ('episoodid', [
-                        { field: 'nimetus', value: 'Vangilaager' },
-                        { field: 'asukoht', value: qs('ev') },
+                        { field: 'asukoht', value: getElukohtKey(qs('ee')) },
                     ]))
                 }
                 if (filter === 'emem') {
@@ -311,182 +904,25 @@ block script
                 }
             }
 
-            console.log({qData: JSON.stringify(qData, null, 2)})
-            $.ajax('/.netlify/functions/baas_search', {
-                data : JSON.stringify(qData),
-                contentType : 'application/json',
-                type : 'POST',
-                cache: false,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('Authorization', 'Basic cmVhZGVyOnJlYWRlcg==')
-                },
-                success: function (data) {
-                    const count = data.hits.total.value
-                    console.log(data.error || 'All green')
-                    $('#search-count').html(count + (count === 1 ? ' #{self.result.count.one}' : ' #{self.result.count.multiple}'))
+            searchQData = qData
 
-                    const hits = data.hits.hits
+            // Check if there's a search to execute
+            var hasQuery = query.length > 0 || qEesnimi || qPerenimi || qSynniaeg || qSynnikoht || qIsanimi || qEmanimi || eElukoht
+            if (hasQuery) {
+                executeSearch(0)
+            }
 
-                    // if it's an id query with a redirect field, redirect to that person
-                    if (idQuery && hits[0]._source.redirect) {
-                        window.location.href = '?q=' + hits[0]._source.redirect
-                    }
-
-                    for (var i = 0; i < count; i++) {
-                        var text = []
-                        var p = hits[i]._source
-
-                        console.log(p)
-                        // skip records with redirect
-                        if (p.redirect) { continue }
-
-                        let c3class = (p.emem||p.kivi||p.evo||p.wwii === 1 ? 'relevantne' : 'mitterelevantne')
-                        if (p.isperson === 0) { c3class = 'nonperson' }
-
-                        text.push('<div id="' + p.id + '" class="search-result pt-2 pb-4 ' + c3class + '">')
-                        text.push('<div class="labels">')
-                        if (p.kivi) { text.push('<span class="kivi">kivi</span>') }
-                        if (p.emem) { text.push('<span class="emem">emem</span>') }
-                        if (p.evo) { text.push('<span class="evo">EVO</span>') }
-                        if (p.wwii) { text.push('<span class="refugee">refugee</span>') }
-                        if (p.mv) { text.push('<span class="mv">MV</span>') }
-                        text.push('</div>')
-                        text.push('<div class="row">')
-
-                        text.push('<h3 class="search-result-name col-12 mb-2 mb-1">' + (p.eesnimi ? p.eesnimi : '') + ' ' + p.perenimi
-                            + ' <a href="https://www.google.com/search?q=%22' + p.eesnimi + '%20' + p.perenimi + '%22" target="_blank" class="google-search"><i class="fas fa-search">G</i></a>'
-                            + '</h3>')
-
-                        text.push('<div class="col-5 col-sm-3">')
-                        if (p.sünd) {
-                            text.push('<p class="mb-0">#{self.result.born}: ' + p.sünd)
-                            if (p.sünnikoht) { text.push('<span> ' + p.sünnikoht + '</span>') }
-                            text.push('</p>')
-                        }
-
-                        if (p.surm) {
-                            text.push('<p class="mb-0">#{self.result.dead}: ' + p.surm)
-                            if (p.surmakoht) { text.push('<span> ' + p.surmakoht + '</span>') }
-                            text.push('</p>')
-                        }
-
-                        if (p.isanimi) { text.push('<p class="mb-0">#{self.result.father}: ' + p.isanimi + '</p>') }
-                        if (p.emanimi) { text.push('<p class="mb-0">#{self.result.mother}: ' + p.emanimi + '</p>') }
-                        let pub_a = pub_b = ''
-                        if (p.wwii) {
-                            pub_a = '<a href="https://wwii-refugees.ee/?q=' + p.id + '">'
-                            pub_b = '</a>'
-                        }
-                        if (p.emem) {
-                            pub_a = '<a href="/baas/?q=' + p.id + '&f=all">'
-                            pub_b = '</a>'
-                        }
-                        text.push('<p class="mb-0"># ' + pub_a + p.id + pub_b)
-                        text.push('<span class="crossfade" clip="' + p.id + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>')
-                        text.push('</p>')
-                        if (p.updated_at) {
-                            text.push('<hr/>')
-                            text.push('<p class="mb-0" style="font-size:8pt; font-weight:100">' + p.updated_at + '</p>')
-                        }
-                        text.push('<p class="search-result-feedback mt-3" data-emi_person ="' + p.id + '"data-forename="' + p.eesnimi + '"data-surname="' + p.perenimi + '"data-patronymic="' + p.isanimi + '"data-born="' + p.sünd + '">#{self.feedback.button}</p>')
-                        text.push('</div>')
-
-                        text.push('<div class="search-result-info col-7 col-sm-6">')
-                        p.kirjed = p.kirjed || []
-                        for (var ik = 0; ik < p.kirjed.length; ik++) {
-                            const kirje = p.kirjed[ik]
-                            let a1 = a2 = ''
-                            if (kirje.viide) {
-                                a1 = '<a href="' + kirje.viide + '" target="_blank">'
-                                a2 = '</a>'
-                            }
-                            text.push('<p class="mt-2 mb-0"><strong>' + a1 + kirje.allikas + a2 + ' ' + kirje.kirjekood + '<span class="crossfade" clip="' + kirje.kirjekood + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>' + ' </strong></p>')
-                            if (kirje.kirje) {
-                                text.push('<p class="mb-1">')
-                                text.push(replaceLinebreaks(kirje.kirje))
-                                text.push('</p>')
-                            }
-                        }
-                        if (p.pereseosed && p.pereseosed.length > 0) {
-                            text.push('<div class="pere"><label>Pereliikmed</label>')
-                            for (var ip = 0; ip < p.pereseosed.length; ip++) {
-                                let pereseos = p.pereseosed[ip].seos
-                                if (p.pereseosed[ip].suund === '-1') {
-                                    pereseos = '(' + pereseos + ')'
-                                }
-                                let perekirjed = p.pereseosed[ip].kirjed
-                                text.push('<li class="my-0 pereliige"><a href="/baas/?q=' + p.pereseosed[ip].persoon + '&f=all">' + p.pereseosed[ip].persoon + ' ' + pereseos + '</a>')
-                                text.push(' : <span onclick="document.querySelector(\'#perekirjed-' + p.pereseosed[ip].persoon + '\').showModal()">' + p.pereseosed[ip].kirje + '</span>')
-                                text.push('</li>')
-                                text.push('<dialog class="perekirjed" id="perekirjed-' + p.pereseosed[ip].persoon + '">')
-                                text.push('<button class="close" onclick="document.querySelector(\'#perekirjed-' + p.pereseosed[ip].persoon + '\').close()">X</button>')
-                                text.push('<ul class="perekirjed">')
-                                for (var ik = 0; ik < perekirjed.length; ik++) {
-                                    text.push('<li class="mb-1">')
-                                    text.push(perekirjed[ik].kirjekood + ': ' + replaceLinebreaks(perekirjed[ik].kirje))
-                                    text.push('</li>')
-                                }
-                                text.push('</ul>')
-                                //- close button
-                                text.push('</dialog>')
-                            }
-                            text.push('</div>')
-                        }
-                        if (p.episoodid && p.episoodid.length > 0) {
-                            text.push('<div class="episoodid"><label>Episoodid</label>')
-                            for (var ie = 0; ie < p.episoodid.length; ie++) {
-                                const episood = p.episoodid[ie]
-                                text.push('<li class="my-0 episood">' + episood.kirjekood)
-                                text.push(' : <span>' + episood.nimetus + '</span>')
-                                if (episood.aeg) { text.push(' <span>' + episood.aeg + '</span>') }
-                                if (episood.asukoht) { text.push(' <span>' + episood.asukoht + '</span>') }
-                                text.push('</li>')
-                            }
-                            text.push('</div>')
-                        }
-                        text.push('</div>')
-
-                        if (p.tahvlikirje) {
-                            text.push('<div class="search-result-plaque' + (p.kivi ? "" : " obsolete") + ' col-12 col-sm-3">')
-                            if (p.tahvlikirje.tahvel) {
-                                text.push('<p class="mb-0">#{self.result.plaque}:</p>')
-                                text.push('<p class="mb-2 plaque-info">' + p.tahvlikirje.tahvel + '</p>')
-                            }
-                            if (p.tahvlikirje.tulp) { text.push('<p class="mb-2">#{self.result.col}: ' + p.tahvlikirje.tulp + ' / #{self.result.row}: ' + p.tahvlikirje.rida + '</p>') }
-                            if (p.tahvlikirje.kirje) {
-                                text.push('<p class="mb-0">#{self.result.nameOnPlaque}: ' + p.tahvlikirje.kirje + '</p>')
-                            }
-                        }
-
-                        if (p.evo === 1) {
-                            text.push('<hr/><p class="mb-0">#{self.result.nameOnEVOPlaque}: ' + p.evokirje + '</p>')
-                        }
-                        text.push('</div>')
-                        text.push('</div>')
-                        text.push('</div>')
-
-                        $('#search-results').append(text.join(''))
-                    }
-                    
-                    // Trigger resize to ensure layout is correct
-                    if (typeof triggerResizeAfterSearchUpdate === 'function') {
-                        triggerResizeAfterSearchUpdate();
-                    }
-                },
-                error: function( error) {
-                    console.log(error)
-                }
+            $('#load-more').click(function () {
+                executeSearch(loadedCount)
             })
 
-            //- $('input[type="radio"]').on('click', function () {
-            //-     if (isIdQuery(qs('q'))) {
-            //-         $('input[value="all"]').prop('checked', true)
-            //-         return
-            //-     }
-            //-     if ($(query && $(this).prop('value')) !== filter) {
-            //-         $('#searchform').submit()
-            //-     }
-            //- })
+            // Language toggle: preserve query params
+            $('.lang-toggle-btn').click(function (e) {
+                e.preventDefault()
+                var targetPath = $(this).attr('href')
+                var currentSearch = window.location.search
+                window.location.href = targetPath + currentSearch
+            })
 
             $('#search-results').on('click', '.search-result-feedback', function () {
                 var emi_person = $(this).data('emi_person')
@@ -501,37 +937,83 @@ block script
                 $('#db-feedback-patronymic').val(patronymic)
                 $('#db-feedback-born').val(born)
 
-                $('#db-feedback-title').html('#{ self.feedback.title }'.replace('%name%', name))
+                var displayName = (forename || '') + ' ' + (surname || '')
+                $('#db-feedback-title').html('#{ self.feedback.title }'.replace('%name%', displayName.trim()))
 
                 $('#db-feedback-title, #db-feedback-text, #db-feedback').removeClass('d-none')
-                $('#db-feedback-success').addClass('d-none')
+                $('#db-feedback-success, #db-feedback-error').addClass('d-none')
                 $('#popup-background, #popup-content').removeClass('d-none')
             })
+
+            // Feedback form: Google Apps Script submission
+            var feedbackApi = 'https://script.google.com/macros/s/AKfycbwa0rPWawYSdCgUJUXD8i9Z-A96Dk6PbXULdefIUDDjIOEoooq1mb1GNgZcrXl6_1V-6Q/exec?_form=baasFeedback'
+
+            function cleanInput(value) {
+                if (!value) return ''
+                var temp = document.createElement('div')
+                temp.innerHTML = value
+                var clean = temp.textContent || temp.innerText || ''
+                return clean.trim().replace(/\s+/g, ' ')
+            }
+
+            function validateEmail(email) {
+                return /\S+@\S+\.\S+/.test(email)
+            }
 
             $('#db-feedback').submit(function (e) {
                 e.preventDefault()
 
+                var email = $('#db-feedback2-email').val()
+                if (!email || !validateEmail(email)) {
+                    alert('#{self.feedback.emailRequired}')
+                    $('#db-feedback2-email').focus()
+                    return
+                }
+
                 var $form = $(this)
+                var formE = $form[0]
+                var formData = new FormData(formE)
+                formData.append('url', window.location.href)
+                formData.append('locale', document.documentElement.lang)
 
-                $.post($form.attr('action'), $form.serialize(), function (data) {
-                    console.log(data)
+                // Clean all form data
+                var cleanedFormData = new FormData()
+                for (var pair of formData.entries()) {
+                    cleanedFormData.append(pair[0], typeof pair[1] === 'string' ? cleanInput(pair[1]) : pair[1])
+                }
 
+                // Disable submit during send
+                $('#db-feedback-submit').prop('disabled', true).text('#{self.feedback.sending}')
+
+                var xhr = new XMLHttpRequest()
+                xhr.open('POST', feedbackApi, true)
+
+                xhr.onload = function () {
+                    $('#db-feedback-submit').prop('disabled', false).text('#{self.feedback.submit}')
                     $('#db-feedback-title, #db-feedback-text, #db-feedback').addClass('d-none')
                     $('#db-feedback-success').removeClass('d-none')
+                    $('#db-feedback-error').addClass('d-none')
 
-                    $('#db-feedback input, #db-feedback textarea').val('')
+                    $('#db-feedback input, #db-feedback textarea, #db-feedback select').val('')
                     $('#db-feedback-title').html('')
 
                     setTimeout(function () {
                         $('#popup-background, #popup-content').addClass('d-none')
-                    }, 4000)
-                })
+                    }, 3000)
+                }
+
+                xhr.onerror = function () {
+                    $('#db-feedback-submit').prop('disabled', false).text('#{self.feedback.submit}')
+                    $('#db-feedback-error').removeClass('d-none')
+                }
+
+                xhr.send(cleanedFormData)
             })
 
             $('#db-feedback-cancel').click(function (e) {
                 e.preventDefault()
 
-                $('#db-feedback input, #db-feedback textarea').val('')
+                $('#db-feedback input, #db-feedback textarea, #db-feedback select').val('')
                 $('#db-feedback-title').html('')
 
                 $('#popup-background, #popup-content').addClass('d-none')

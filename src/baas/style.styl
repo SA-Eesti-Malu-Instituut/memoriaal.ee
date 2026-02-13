@@ -1,35 +1,229 @@
+.baas-header
+    display flex
+    justify-content space-between
+    align-items center
+    margin-bottom 0.5em
+    h3
+        margin-bottom 0
+
+.lang-toggle
+    display flex
+    gap 0.25em
+    .lang-toggle-btn
+        padding 0.25em 0.75em
+        border-radius 0.25em
+        font-size 0.8em
+        font-weight 600
+        text-decoration none
+        color var(--emem-nuputaust)
+        border 1px solid var(--emem-nuputaust)
+        transition background-color 0.2s, color 0.2s
+        &.active
+            background-color var(--emem-nuputaust)
+            color var(--emem-v2ljataust)
+        &:hover:not(.active)
+            background-color var(--emem-nupp-hover)
+            color var(--emem-valge)
+
+.baas-description
+    font-size 0.9em
+    color var(--emem-valge)
+    line-height 1.5
+
+#search
+    max-width 1280px
+    margin 0 auto
+    margin-top 1.25rem
+    padding 0 1.5rem
+
 #searchForm
-    border: 0em solid var(--emem-nuputaust)
-    border-radius 0.0em
+    border-radius 0.5em
+    padding 1em 0
+
+    // Main search bar
+    .col-12:first-child
+        display flex
+        gap 0
+        margin-bottom 1em
+        align-items stretch
+        flex-wrap nowrap
+
+        #mainSearchInput
+            min-width 0
+
+        #clearSearchButton
+            margin-left 0.6em
+            white-space nowrap
+            flex-shrink 0
+
+        #mainSearchButton
+            flex-shrink 0
+
     #mainSearchInput
-        border-top-right-radius 0em
-        border-bottom-right-radius 0em
-    button
+        border 1px solid rgba(49, 2, 2, 0.2)
+        border-right none
+        border-radius 0.4em 0 0 0.4em
+        padding 0.6em 1em
+        font-size 1em
+        color var(--emem-v2ljatekst)
+        background-color var(--emem-v2ljataust)
+        transition border-color 0.2s
+        &:focus
+            outline none
+            border-color var(--emem-nuputaust)
+
     #mainSearchButton
         color var(--emem-v2ljataust)
         background-color var(--emem-nuputaust)
-        border 0.5px solid var(--emem-v2ljataust)
-        border-radius 0.25em
-        font-weight 400
-        padding 0.0em
+        border 1px solid var(--emem-nuputaust)
+        border-radius 0 0.4em 0.4em 0
+        font-weight 500
+        padding 0.6em 1.5em
         cursor pointer
+        font-size 1em
+        transition background-color 0.2s
         &:hover
             background-color var(--emem-nupp-hover)
             color var(--emem-valge)
-            font-weight 700
-    #mainSearchButton
-        border-left 0em
-        border-top-left-radius 0em
-        border-bottom-left-radius 0em
+
+    // Detail fields section
     #episoodifilter
+        padding-top 0.5em
         label
             text-align right
-            padding 0.25em 2em 0em 0em
+            padding 0.3em 1em 0 0
+            margin-bottom 0.1em
+            margin-right 0
+            font-size 0.9em
+            color var(--emem-valge)
+            font-weight 500
+            line-height 1.2
+        .form-check
+            margin-bottom 0.4em !important
+            margin-top 0.4em !important
+        input.form-check-input.emem-text-input[type='search']
+            position static
+            margin-left 0
+            margin-top 0
+        .elukoht-row
+            display flex
+            align-items center
+            .form-check-label
+                margin-bottom 0
+            .elukoht-autocomplete
+                padding-left 0
+                padding-right 0
+
+.elukoht-autocomplete
+    position relative
+    input.emem-text-input
+        width 100%
+
+.autocomplete-suggestions
+    position absolute
+    top calc(100% + 0.2rem)
+    left 0
+    right 0
+    z-index 50
+    background-color var(--emem-v2ljataust)
+    border 1px solid rgba(49, 2, 2, 0.25)
+    border-radius 0.3em
+    max-height 14rem
+    overflow-y auto
+    box-shadow 0 6px 12px rgba(0, 0, 0, 0.2)
+
+.autocomplete-option
+    display block
+    width 100%
+    text-align left
+    border 0
+    background transparent
+    color var(--emem-v2ljatekst)
+    padding 0.45em 0.7em
+    font-size 0.9em
+    cursor pointer
+    &:hover
+        background-color rgba(49, 2, 2, 0.08)
+
+#searchForm
+    #clearSearchButton
+        background-color var(--emem-v2ljataust)
+        border 1px solid var(--emem-nupp-hover)
+        border-radius 0.3em
+        color var(--emem-v2ljatekst)
+        cursor pointer
+        padding 0.35em 1em
+        font-size 0.85em
+        font-weight 700
+        transition all 0.2s
+        &:hover
+            background-color var(--emem-nupp-hover)
+            border-color var(--emem-nupp-hover)
+            color var(--emem-valge)
+
     .emem-text-input
         color var(--emem-v2ljatekst)
         background-color var(--emem-v2ljataust)
-        border 0 0 0 1px solid var(--emem-nuputaust)
-        border-radius 0.25em
+        opacity 1
+        border 1px solid rgba(49, 2, 2, 0.2)
+        border-radius 0.3em
+        padding 0.35em 0.6em
+        font-size 0.9em
+        transition border-color 0.2s
+        &:focus
+            outline none
+            border-color var(--emem-nuputaust)
+
+    hr
+        border-color rgba(49, 2, 2, 0.1)
+        margin 0.75em 0
+
+    .form-check.col-lg-4
+        padding-top 0.5em
+        .form-check
+            display inline-block
+            margin 0.2em 0.15em !important
+            input.form-check-input
+                display none
+                &:checked + label
+                    background-color var(--emem-nuputaust)
+                    color var(--emem-v2ljataust)
+                    border-color var(--emem-nuputaust)
+            label.form-check-label
+                display inline-block
+                padding 0.25em 0.75em
+                border 1px solid rgba(49, 2, 2, 0.3)
+                border-radius 1em
+                font-size 0.8em
+                color var(--emem-valge)
+                cursor pointer
+                transition all 0.2s
+                &:hover
+                    background-color rgba(49, 2, 2, 0.08)
+
+#search-count
+    font-weight 500
+
+#pagination
+    padding 1em 0
+    #load-more
+        color var(--emem-v2ljataust)
+        background-color var(--emem-nuputaust)
+        border 1px solid var(--emem-nuputaust)
+        border-radius 0.4em
+        padding 0.5em 2em
+        cursor pointer
+        font-size 0.9em
+        transition background-color 0.2s
+        &:hover
+            background-color var(--emem-nupp-hover)
+            color var(--emem-valge)
+        &:disabled
+            opacity 0.6
+            cursor wait
+    #pagination-status
+        font-size 0.85em
+        color var(--emem-tekst)
 
 .crossfade {
     display: inline;
@@ -85,6 +279,29 @@ div.pere {
     display: inline-block;
 }
 
+// Mobile responsive
+@media (max-width: 767px)
+    #search
+        margin-top 1rem
+        padding 0 1rem
+
+    #searchForm
+        #episoodifilter
+            label
+                text-align left
+                padding 0 0 0.2em 0
+                margin-right 0
+            .form-check
+                flex-direction column
+        .form-check.col-lg-4
+            .form-check
+                width auto
+
+    .baas-header
+        flex-direction column
+        align-items flex-start
+        gap 0.5em
+
 @media print {
     * {
         color: #000 !important;
@@ -126,6 +343,10 @@ div.pere {
     }
 
     #navigation {
+        display: none !important;
+    }
+
+    .lang-toggle, #pagination, .baas-description {
         display: none !important;
     }
 }
