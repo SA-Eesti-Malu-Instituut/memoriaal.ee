@@ -932,11 +932,11 @@ block script
                 var patronymic = $(this).data('patronymic')
                 var born = $(this).data('born')
 
-                $('#db-feedback-emiPerson').val(emi_person)
-                $('#db-feedback-forename').val(forename)
-                $('#db-feedback-surname').val(surname)
-                $('#db-feedback-patronymic').val(patronymic)
-                $('#db-feedback-born').val(born)
+                $('#db-feedback2-emiPerson').val(emi_person)
+                $('#db-feedback2-forename').val(forename)
+                $('#db-feedback2-surname').val(surname)
+                $('#db-feedback2-patronymic').val(patronymic)
+                $('#db-feedback2-born').val(born)
 
                 var displayName = (forename || '') + ' ' + (surname || '')
                 $('#db-feedback-title').html('#{ self.feedback.title }'.replace('%name%', displayName.trim()))
