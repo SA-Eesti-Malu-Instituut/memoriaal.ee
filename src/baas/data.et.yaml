@@ -48,24 +48,20 @@ feedback:
     contactPhone: Sinu telefoninumber
 
     tagasisideSection: Tagasiside
-    episode: Episood
-    episodeDate: Kuupäev
-    rownum: Järjekorranumber
-    emiPerson: EMI isiku ID (persoon)
     forename: Eesnimi
-    surname: Perenimi
-    patronymic: Isanimi
-    motherName: Emanimi
-    born: Sünniaeg
-    birthPlace: Sünnikoht
-    deathDate: Surmaaeg
-    deathPlace: Surmakoht
+    surname: Perekonnanimi
+    fathername: Isa nimi
+    mothername: Ema nimi
+    birthdate: Sünniaeg
+    birthplace: Sünnikoht
+    deathdate: Surmaaeg
+    deathplace: Surmakoht
     feedback: Tagasiside
     feedbackPlaceholder: Palun lisage siia oma täpsustused, kommentaarid, parandused jne
 
-    submit: Saada tagasiside
+    submit: Saada
     sending: Saadan...
     cancel: Tühista
-    success: Täname tagasiside eest
+    success: Tagasiside on edukalt saadetud
     error: Tagasiside saatmine ebaõnnestus. Palun proovige uuesti.
     nameRequired: Nimi ja e-posti aadress on kohustuslikud väljad

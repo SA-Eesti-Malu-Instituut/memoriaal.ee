@@ -49,24 +49,20 @@ feedback:
     contactPhone: Your phone number
 
     tagasisideSection: Feedback
-    episode: Episode
-    episodeDate: Date
-    rownum: Row number
-    emiPerson: EMI person ID
     forename: First name
     surname: Last name
-    patronymic: Father's name
-    motherName: Mother's name
-    born: Date of birth
-    birthPlace: Place of birth
-    deathDate: Date of death
-    deathPlace: Place of death
+    fathername: Father's name
+    mothername: Mother's name
+    birthdate: Date of birth
+    birthplace: Place of birth
+    deathdate: Date of death
+    deathplace: Place of death
     feedback: Feedback
     feedbackPlaceholder: Please add your corrections, comments, additions etc.
 
-    submit: Send feedback
+    submit: Send
     sending: Sending...
     cancel: Cancel
-    success: Thank You!
+    success: Feedback has been sent successfully
     error: Failed to send feedback. Please try again.
     nameRequired: Name and e-mail address are mandatory fields

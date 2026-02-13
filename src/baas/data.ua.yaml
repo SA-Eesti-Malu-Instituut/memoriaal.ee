@@ -48,23 +48,19 @@ feedback:
     contactPhone: Ваш номер телефону
 
     tagasisideSection: Зворотній зв'язок
-    episode: Епізод
-    episodeDate: Дата
-    rownum: Номер рядка
-    emiPerson: EMI ID особи
     forename: Ім'я
     surname: Прізвище
-    patronymic: Ім'я батька
-    motherName: Ім'я матері
-    born: Дата народження
-    birthPlace: Місце народження
-    deathDate: Дата смерті
-    deathPlace: Місце смерті
+    fathername: Ім'я батька
+    mothername: Ім'я матері
+    birthdate: Дата народження
+    birthplace: Місце народження
+    deathdate: Дата смерті
+    deathplace: Місце смерті
     feedback: Зворотній зв'язок
     feedbackPlaceholder: Будь ласка, додайте свої уточнення, коментарі, виправлення тощо
 
     submit: Надіслати
     cancel: Скасувати
-    success: Дякуємо!
+    success: Зворотній зв'язок успішно надіслано
     error: Не вдалося надіслати. Будь ласка, спробуйте ще раз.
     nameRequired: Ім'я та електронна адреса є обов'язковими полями
