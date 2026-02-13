@@ -40,10 +40,14 @@ feedback:
     button: Tagasiside
     title: Tagasiside %name% kohta
     text: |
-        Valige episood. Kui on teada sünniaeg, märkige ka see.
-        Kõikvõimalik muu info on samuti teretulnud.
-    email: Täitja e-post
+        Kui soovite täiendada isiku andmeid, siis palun täitke allolev vorm.
 
+    infoAndja: Info andja
+    contactName: Sinu nimi
+    email: Sinu e-posti aadress
+    contactPhone: Sinu telefoninumber
+
+    tagasisideSection: Tagasiside
     episode: Episood
     episodeDate: Kuupäev
     rownum: Järjekorranumber
@@ -51,12 +55,17 @@ feedback:
     forename: Eesnimi
     surname: Perenimi
     patronymic: Isanimi
+    motherName: Emanimi
     born: Sünniaeg
-    feedback: Kõikvõimalik muu info
+    birthPlace: Sünnikoht
+    deathDate: Surmaaeg
+    deathPlace: Surmakoht
+    feedback: Tagasiside
+    feedbackPlaceholder: Palun lisage siia oma täpsustused, kommentaarid, parandused jne
 
     submit: Saada tagasiside
     sending: Saadan...
     cancel: Tühista
     success: Täname tagasiside eest
     error: Tagasiside saatmine ebaõnnestus. Palun proovige uuesti.
-    emailRequired: Palun sisestage e-posti aadress
+    nameRequired: Nimi ja e-posti aadress on kohustuslikud väljad

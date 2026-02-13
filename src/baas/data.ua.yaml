@@ -40,20 +40,31 @@ feedback:
     button: Зворотній зв'язок
     title: Зворотній зв'язок про %name%
     text: |
-        Виберіть епізод. Якщо відома дата народження, вкажіть її.
-        Будь-яка інша інформація також вітається.
-    email: Контактний E-mail
+        Якщо ви хочете доповнити дані про особу, будь ласка, заповніть форму нижче.
 
-    episode: Episode
-    episodeDate: Date
-    rownum: Row number
-    emiPerson: EMI person ID
-    forename: First name
-    surname: Last name
-    patronymic: Father's name
-    born: Date of birth
-    feedback: Feedback
+    infoAndja: Інформація про відправника
+    contactName: Ваше ім'я
+    email: Ваша електронна адреса
+    contactPhone: Ваш номер телефону
 
-    submit: Send feedback
-    cancel: Cancel
-    success: Thank You!
+    tagasisideSection: Зворотній зв'язок
+    episode: Епізод
+    episodeDate: Дата
+    rownum: Номер рядка
+    emiPerson: EMI ID особи
+    forename: Ім'я
+    surname: Прізвище
+    patronymic: Ім'я батька
+    motherName: Ім'я матері
+    born: Дата народження
+    birthPlace: Місце народження
+    deathDate: Дата смерті
+    deathPlace: Місце смерті
+    feedback: Зворотній зв'язок
+    feedbackPlaceholder: Будь ласка, додайте свої уточнення, коментарі, виправлення тощо
+
+    submit: Надіслати
+    cancel: Скасувати
+    success: Дякуємо!
+    error: Не вдалося надіслати. Будь ласка, спробуйте ще раз.
+    nameRequired: Ім'я та електронна адреса є обов'язковими полями

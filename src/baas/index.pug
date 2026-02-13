@@ -343,18 +343,27 @@ block content
                 +markdown(self.feedback.text)
 
             form#db-feedback.col-12.col-md-8.offset-md-2(name='db-feedback2')
-                .form-group.mt-5
-                    label.form-label.col-12.px-0(for='db-feedback2-email'
-                        )= self.feedback.email
+                h3.feedback-section-title= self.feedback.infoAndja
+                .form-group.mt-3
+                    label.form-label.col-12.px-0(for='db-feedback2-contactName')= self.feedback.contactName + ' *'
+                    input#db-feedback2-contactName.col-12.px-0(
+                        type='text', name='contactName', required, autocomplete='on')
+                .form-group.mt-3
+                    label.form-label.col-12.px-0(for='db-feedback2-email')= self.feedback.email + ' *'
                     input#db-feedback2-email.col-12.px-0(
-                        type='email', name='contact-email')
-                hr
-                .form-group.mt-5
+                        type='email', name='contact-email', required, autocomplete='on')
+                .form-group.mt-3
+                    label.form-label.col-12.px-0(for='db-feedback2-contactPhone')= self.feedback.contactPhone
+                    input#db-feedback2-contactPhone.col-12.px-0(
+                        type='text', name='contactPhone', autocomplete='on')
+
+                h3.feedback-section-title.mt-5= self.feedback.tagasisideSection
+                .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback2-emiPerson'
                         )= self.feedback.emiPerson
                     input#db-feedback2-emiPerson.col-12.px-0(
                         type='text', name='emiPerson')
-                .form-group.mt-5
+                .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback2-rownum'
                         )= self.feedback.rownum
                     input#db-feedback2-rownum.col-12.px-0(
@@ -363,35 +372,55 @@ block content
                 //- Valikud laetakse API kaudu episoodid.js abil
                 //- API tagastab JSON-i kujul
                 //- [[{"id":1,"Kuupäev":"1947-12","Nimetus":"Esbjergi (Gjesingi) laagris asuvad eestlased detsembris 1947"}]
-                .form-group.mt-5
+                .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback2-episode'
                         )= self.feedback.episode
                     select#db-feedback2-episode-select.col-12.px-0(name='episode')
                     //- fetch episoodid from getEpisodes() in episoodid.js on document load
 
-                .form-group.mt-5
+                .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback2-forename'
                         )= self.feedback.forename
                     input#db-feedback2-forename.col-12.px-0(
                         type='text', name='forename')
-                .form-group.mt-5
+                .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback2-surname'
                         )= self.feedback.surname
                     input#db-feedback2-surname.col-12.px-0(
                         type='text', name='surname')
-                .form-group.mt-5
+                .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback2-patronymic'
                         )= self.feedback.patronymic
                     input#db-feedback2-patronymic.col-12.px-0(
                         type='text', name='patronymic')
-                .form-group.mt-5
+                .form-group.mt-3
+                    label.form-label.col-12.px-0(for='db-feedback2-motherName'
+                        )= self.feedback.motherName
+                    input#db-feedback2-motherName.col-12.px-0(
+                        type='text', name='motherName')
+                .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback2-born'
                         )= self.feedback.born
                     input#db-feedback2-born.col-12.px-0(
                         type='date', name='born')
-                .form-group.mt-5
+                .form-group.mt-3
+                    label.form-label.col-12.px-0(for='db-feedback2-birthPlace'
+                        )= self.feedback.birthPlace
+                    input#db-feedback2-birthPlace.col-12.px-0(
+                        type='text', name='birthPlace')
+                .form-group.mt-3
+                    label.form-label.col-12.px-0(for='db-feedback2-deathDate'
+                        )= self.feedback.deathDate
+                    input#db-feedback2-deathDate.col-12.px-0(
+                        type='date', name='deathDate')
+                .form-group.mt-3
+                    label.form-label.col-12.px-0(for='db-feedback2-deathPlace'
+                        )= self.feedback.deathPlace
+                    input#db-feedback2-deathPlace.col-12.px-0(
+                        type='text', name='deathPlace')
+                .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback2-feedback')= self.feedback.feedback
-                    textarea#db-feedback2-feedback.col-12.px-0(name='feedback', rows=5)
+                    textarea#db-feedback2-feedback.col-12.px-0(name='feedback', rows=5, placeholder=self.feedback.feedbackPlaceholder)
                 .form-group.mt-5.text-right
                     button#db-feedback2-cancel.btn.btn-secondary= self.feedback.cancel
                     button#db-feedback-submit.btn.btn-primary.ml-3(type='submit')= self.feedback.submit
@@ -498,7 +527,7 @@ block script
                     text.push('<hr/>')
                     text.push('<p class="mb-0" style="font-size:8pt; font-weight:100">' + p.updated_at + '</p>')
                 }
-                text.push('<p class="search-result-feedback mt-3" data-emi_person ="' + p.id + '"data-forename="' + p.eesnimi + '"data-surname="' + p.perenimi + '"data-patronymic="' + p.isanimi + '"data-born="' + p.sünd + '">#{self.feedback.button}</p>')
+                text.push('<p class="search-result-feedback mt-3" data-emi_person="' + p.id + '" data-forename="' + (p.eesnimi || '') + '" data-surname="' + (p.perenimi || '') + '" data-patronymic="' + (p.isanimi || '') + '" data-mothername="' + (p.emanimi || '') + '" data-born="' + (p.sünd || '') + '" data-birthplace="' + (p.sünnikoht || '') + '" data-deathdate="' + (p.surm || '') + '" data-deathplace="' + (p.surmakoht || '') + '">#{self.feedback.button}</p>')
                 text.push('</div>')
 
                 text.push('<div class="search-result-info col-7 col-sm-6">')
@@ -930,13 +959,21 @@ block script
                 var forename = $(this).data('forename')
                 var surname = $(this).data('surname')
                 var patronymic = $(this).data('patronymic')
+                var mothername = $(this).data('mothername')
                 var born = $(this).data('born')
+                var birthplace = $(this).data('birthplace')
+                var deathdate = $(this).data('deathdate')
+                var deathplace = $(this).data('deathplace')
 
                 $('#db-feedback2-emiPerson').val(emi_person)
                 $('#db-feedback2-forename').val(forename)
                 $('#db-feedback2-surname').val(surname)
                 $('#db-feedback2-patronymic').val(patronymic)
+                $('#db-feedback2-motherName').val(mothername)
                 $('#db-feedback2-born').val(born)
+                $('#db-feedback2-birthPlace').val(birthplace)
+                $('#db-feedback2-deathDate').val(deathdate)
+                $('#db-feedback2-deathPlace').val(deathplace)
 
                 var displayName = (forename || '') + ' ' + (surname || '')
                 $('#db-feedback-title').html('#{ self.feedback.title }'.replace('%name%', displayName.trim()))
@@ -964,10 +1001,15 @@ block script
             $('#db-feedback').submit(function (e) {
                 e.preventDefault()
 
+                var contactName = $('#db-feedback2-contactName').val()
                 var email = $('#db-feedback2-email').val()
-                if (!email || !validateEmail(email)) {
-                    alert('#{self.feedback.emailRequired}')
-                    $('#db-feedback2-email').focus()
+                if (!contactName || !contactName.trim() || !email || !validateEmail(email)) {
+                    alert('#{self.feedback.nameRequired}')
+                    if (!contactName || !contactName.trim()) {
+                        $('#db-feedback2-contactName').focus()
+                    } else {
+                        $('#db-feedback2-email').focus()
+                    }
                     return
                 }
 

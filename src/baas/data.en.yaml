@@ -40,9 +40,15 @@ result:
 feedback:
     button: Feedback
     title: Feedback about %name%
-    text:
-    email: Contact E-mail
+    text: |
+        If you wish to supplement the person's data, please fill out the form below.
 
+    infoAndja: Information provider
+    contactName: Your name
+    email: Your e-mail address
+    contactPhone: Your phone number
+
+    tagasisideSection: Feedback
     episode: Episode
     episodeDate: Date
     rownum: Row number
@@ -50,12 +56,17 @@ feedback:
     forename: First name
     surname: Last name
     patronymic: Father's name
+    motherName: Mother's name
     born: Date of birth
+    birthPlace: Place of birth
+    deathDate: Date of death
+    deathPlace: Place of death
     feedback: Feedback
+    feedbackPlaceholder: Please add your corrections, comments, additions etc.
 
     submit: Send feedback
     sending: Sending...
     cancel: Cancel
     success: Thank You!
     error: Failed to send feedback. Please try again.
-    emailRequired: Please enter an email address
+    nameRequired: Name and e-mail address are mandatory fields
