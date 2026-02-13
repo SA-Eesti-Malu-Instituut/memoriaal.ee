@@ -988,7 +988,8 @@ block script
 
                 fetch(feedbackApi, {
                     method: 'POST',
-                    body: cleanedFormData
+                    body: cleanedFormData,
+                    mode: 'no-cors'
                 })
                 .then(function () {
                     $('#db-feedback-submit').prop('disabled', false).text('#{self.feedback.submit}')
