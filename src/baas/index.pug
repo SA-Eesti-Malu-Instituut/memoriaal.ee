@@ -986,10 +986,11 @@ block script
                 // Disable submit during send
                 $('#db-feedback-submit').prop('disabled', true).text('#{self.feedback.sending}')
 
-                var xhr = new XMLHttpRequest()
-                xhr.open('POST', feedbackApi, true)
-
-                xhr.onload = function () {
+                fetch(feedbackApi, {
+                    method: 'POST',
+                    body: cleanedFormData
+                })
+                .then(function () {
                     $('#db-feedback-submit').prop('disabled', false).text('#{self.feedback.submit}')
                     $('#db-feedback-title, #db-feedback-text, #db-feedback').addClass('d-none')
                     $('#db-feedback-success').removeClass('d-none')
@@ -1001,14 +1002,11 @@ block script
                     setTimeout(function () {
                         $('#popup-background, #popup-content').addClass('d-none')
                     }, 3000)
-                }
-
-                xhr.onerror = function () {
+                })
+                .catch(function () {
                     $('#db-feedback-submit').prop('disabled', false).text('#{self.feedback.submit}')
                     $('#db-feedback-error').removeClass('d-none')
-                }
-
-                xhr.send(cleanedFormData)
+                })
             })
 
             function closePopup() {
