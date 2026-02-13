@@ -336,6 +336,7 @@ block content
 
     #popup-background.d-none
     #popup-content.p-3.d-none
+        button#popup-close-btn(type='button', aria-label='Close') &times;
         .row
             h2#db-feedback-title.col-12= self.feedback.title
             #db-feedback-text.col-12.col-md-10.offset-md-1
@@ -1010,12 +1011,22 @@ block script
                 xhr.send(cleanedFormData)
             })
 
-            $('#db-feedback-cancel').click(function (e) {
-                e.preventDefault()
-
+            function closePopup() {
                 $('#db-feedback input, #db-feedback textarea, #db-feedback select').val('')
                 $('#db-feedback-title').html('')
-
                 $('#popup-background, #popup-content').addClass('d-none')
+            }
+
+            $('#db-feedback-cancel').click(function (e) {
+                e.preventDefault()
+                closePopup()
+            })
+
+            $('#popup-close-btn').click(function () {
+                closePopup()
+            })
+
+            $('#popup-background').click(function () {
+                closePopup()
             })
         })
