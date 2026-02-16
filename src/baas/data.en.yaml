@@ -1,6 +1,6 @@
 path: baas
-title: Database
-description: The database of victims of communism contains records of Estonian residents who suffered under Soviet repressions during 1940–1991.
+title: EMMA
+description: Estonian Memorial & Migration Dataset
 pictures:
     - /images/bg/andmebaas.jpg
 q:
