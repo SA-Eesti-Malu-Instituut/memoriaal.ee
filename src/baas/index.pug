@@ -21,7 +21,10 @@ block content
                     type='button',
                     onclick='clearForm(event)'
                 )= self.search.clear
-            #episoodifilter.form-check.col-lg-8.col-md-6.col-sm-12
+            button#toggleAdvanced.d-md-none(type='button', onclick='toggleAdvancedSearch()')
+                span= self.search.advancedSearch
+                span.toggle-chevron &#9660;
+            #episoodifilter.form-check.col-lg-8.col-md-6.col-sm-12.advanced-section
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qForename')= self.q.eesnimi
                     input.form-check-input.emem-text-input.col-8(type='search', id='qForename', name='fn', placeholder=self.q.eesnimi)
@@ -306,7 +309,7 @@ block content
                     option(value='Võisiku vald' data-key='VÕISIKU V')
                     option(value='Võru vald' data-key='VÕRU V')
                     option(value='Äksi vald' data-key='ÄKSI V')
-            .form-check.col-lg-4.col-md-6.col-sm-12
+            .form-check.col-lg-4.col-md-6.col-sm-12.advanced-section
                 .form-check.col-12.my-2
                     input.form-check-input(type='radio', id='filter_'+self.search.radio.all, name='f', value='all')
                     label.form-check-label(for='filter_'+self.search.radio.all)= self.search.radio.all
@@ -439,6 +442,13 @@ block script
                 event.preventDefault()
                 return false
             }
+        }
+        const toggleAdvancedSearch = () => {
+            const sections = document.querySelectorAll('.advanced-section')
+            const chevron = document.querySelector('.toggle-chevron')
+            const isOpen = sections[0] && sections[0].classList.contains('open')
+            sections.forEach(s => s.classList.toggle('open'))
+            if (chevron) chevron.innerHTML = isOpen ? '\u25BC' : '\u25B2'
         }
         const clearForm = (event) => {
             const form = event.target.form
@@ -749,6 +759,11 @@ block script
             qEmanimi && (document.getElementById('qMother').value = qEmanimi)
 
             eElukoht && (document.getElementById('episoodElukoht').value = getElukohtNiceName(eElukoht))
+
+            // Auto-open advanced fields if any detail param is set
+            if (qEesnimi || qPerenimi || qSynniaeg || qSynnikoht || qIsanimi || qEmanimi || eElukoht || (filter && filter !== 'all')) {
+                toggleAdvancedSearch()
+            }
 
             $('#episoodElukoht').on('input', function () {
                 showElukohtSuggestions(this.value)

@@ -43,6 +43,7 @@ search:
     placeholder: введите поисковый запрос →
     button: Искать
     clear: Очистить
+    advancedSearch: Розширений пошук
     title: Поиск в электронном мемориале
     radio:
         all: From all records

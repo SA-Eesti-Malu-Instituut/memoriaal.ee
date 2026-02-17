@@ -36,6 +36,27 @@
     margin-top 1.25rem
     padding 0 1.5rem
 
+#toggleAdvanced
+    width 100%
+    padding 0.5em 1em
+    margin-bottom 0.75em
+    background-color transparent
+    border 1px solid rgba(49, 2, 2, 0.3)
+    border-radius 0.4em
+    color var(--emem-valge)
+    font-size 0.85em
+    font-weight 500
+    cursor pointer
+    display flex
+    justify-content space-between
+    align-items center
+    transition all 0.2s
+    &:hover
+        background-color rgba(49, 2, 2, 0.15)
+    .toggle-chevron
+        font-size 0.7em
+        margin-left 0.5em
+
 #searchForm
     border-radius 0.5em
     padding 1em 0
@@ -514,14 +535,57 @@ div.pere {
         margin-top 1rem
         padding 0 1rem
 
+    .advanced-section
+        display none !important
+        &.open
+            display block !important
+
     #searchForm
+        // Main search bar: wrap so input goes full width, buttons below
+        .col-12:first-child
+            flex-wrap wrap
+            #mainSearchInput
+                width 100%
+                flex 1 1 100%
+                border-radius 0.4em
+                border-right 1px solid rgba(49, 2, 2, 0.2)
+                margin-bottom 0.5em
+            #mainSearchButton
+                flex 1 1 0
+                border-radius 0.4em 0 0 0.4em
+            #clearSearchButton
+                flex 0 1 auto
+                margin-left 0
+                border-radius 0 0.4em 0.4em 0
+                border-left none
+
+        // Detail fields: stack label above input
         #episoodifilter
             label
                 text-align left
                 padding 0 0 0.2em 0
                 margin-right 0
-            .form-check
+            .form-check.col-md-12
+                display flex
                 flex-direction column
+                label.form-check-label
+                    width 100%
+                    max-width 100%
+                    flex none
+                input.form-check-input.emem-text-input
+                    width 100%
+                    max-width 100%
+                    flex none
+            .elukoht-row
+                flex-direction column
+                align-items stretch
+                .form-check-label
+                    width 100%
+                    max-width 100%
+                .elukoht-autocomplete
+                    width 100%
+                    max-width 100%
+
         .form-check.col-lg-4
             .form-check
                 width auto

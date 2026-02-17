@@ -43,6 +43,7 @@ search:
     placeholder: enter search term →
     button: Search
     clear: Clear
+    advancedSearch: Advanced search
     title: Search in the electronic memorial
     radio:
         all: From all records

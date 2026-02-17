@@ -53,6 +53,7 @@ search:
     placeholder: sisesta otsisõna →
     button: Otsi
     clear: Puhasta
+    advancedSearch: Täpsem otsing
     title: Otsing kommunismiohvrite andmebaasist
     radio:
         all: Kõigi kirjete seast
