@@ -1017,9 +1017,14 @@ block script
                 formData.append('locale', document.documentElement.lang)
 
                 // Clean all form data
+                var dateFields = ['birthdate', 'deathdate']
                 var cleanedFormData = new FormData()
                 for (var pair of formData.entries()) {
-                    cleanedFormData.append(pair[0], typeof pair[1] === 'string' ? cleanInput(pair[1]) : pair[1])
+                    var value = typeof pair[1] === 'string' ? cleanInput(pair[1]) : pair[1]
+                    if (dateFields.indexOf(pair[0]) !== -1 && value) {
+                        value = "'" + value
+                    }
+                    cleanedFormData.append(pair[0], value)
                 }
 
                 // Disable submit during send
