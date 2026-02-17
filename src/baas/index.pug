@@ -1016,15 +1016,12 @@ block script
                 formData.append('nav_lang', navigator.language)
                 formData.append('locale', document.documentElement.lang)
 
-                // Clean all form data
-                var dateFields = ['birthdate', 'deathdate']
-                var cleanedFormData = new FormData()
+                // Clean all form data and build URL-encoded params
+                var params = new URLSearchParams()
                 for (var pair of formData.entries()) {
-                    var value = typeof pair[1] === 'string' ? cleanInput(pair[1]) : pair[1]
-                    if (dateFields.indexOf(pair[0]) !== -1 && value) {
-                        value = "'" + value
+                    if (typeof pair[1] === 'string') {
+                        params.append(pair[0], cleanInput(pair[1]))
                     }
-                    cleanedFormData.append(pair[0], value)
                 }
 
                 // Disable submit during send
@@ -1032,7 +1029,7 @@ block script
 
                 fetch(feedbackApi, {
                     method: 'POST',
-                    body: cleanedFormData,
+                    body: params,
                     mode: 'no-cors'
                 })
                 .then(function () {
