@@ -366,45 +366,45 @@ block content
                     label.form-label.col-12.px-0(for='db-feedback-forename'
                         )= self.feedback.forename
                     input#db-feedback-forename.col-12.px-0(
-                        type='text', name='forename')
+                        type='text', name='forename', autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-surname'
                         )= self.feedback.surname
                     input#db-feedback-surname.col-12.px-0(
-                        type='text', name='surname')
+                        type='text', name='surname', autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-fathername'
                         )= self.feedback.fathername
                     input#db-feedback-fathername.col-12.px-0(
-                        type='text', name='fathername')
+                        type='text', name='fathername', autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-mothername'
                         )= self.feedback.mothername
                     input#db-feedback-mothername.col-12.px-0(
-                        type='text', name='mothername')
+                        type='text', name='mothername', autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-birthdate'
                         )= self.feedback.birthdate
                     input#db-feedback-birthdate.col-12.px-0(
-                        type='date', name='birthdate')
+                        type='date', name='birthdate', autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-birthplace'
                         )= self.feedback.birthplace
                     input#db-feedback-birthplace.col-12.px-0(
-                        type='text', name='birthplace')
+                        type='text', name='birthplace', autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-deathdate'
                         )= self.feedback.deathdate
                     input#db-feedback-deathdate.col-12.px-0(
-                        type='date', name='deathdate')
+                        type='date', name='deathdate', autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-deathplace'
                         )= self.feedback.deathplace
                     input#db-feedback-deathplace.col-12.px-0(
-                        type='text', name='deathplace')
+                        type='text', name='deathplace', autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-feedback')= self.feedback.feedback
-                    textarea#db-feedback-feedback.col-12.px-0(name='feedback', rows=5, placeholder=self.feedback.feedbackPlaceholder)
+                    textarea#db-feedback-feedback.col-12.px-0(name='feedback', rows=5, placeholder=self.feedback.feedbackPlaceholder, autocomplete='off', data-lpignore='true', data-1p-ignore)
                 .form-group.mt-5.text-right
                     button#db-feedback-cancel.btn.btn-secondary= self.feedback.cancel
                     button#db-feedback-submit.btn.btn-primary.ml-3(type='submit')= self.feedback.submit
