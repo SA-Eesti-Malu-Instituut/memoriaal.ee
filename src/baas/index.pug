@@ -386,7 +386,7 @@ block content
                     label.form-label.col-12.px-0(for='db-feedback-birthdate'
                         )= self.feedback.birthdate
                     input#db-feedback-birthdate.col-12.px-0(
-                        type='text', name='birthdate')
+                        type='date', name='birthdate')
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-birthplace'
                         )= self.feedback.birthplace
@@ -396,7 +396,7 @@ block content
                     label.form-label.col-12.px-0(for='db-feedback-deathdate'
                         )= self.feedback.deathdate
                     input#db-feedback-deathdate.col-12.px-0(
-                        type='text', name='deathdate')
+                        type='date', name='deathdate')
                 .form-group.mt-3
                     label.form-label.col-12.px-0(for='db-feedback-deathplace'
                         )= self.feedback.deathplace
@@ -941,6 +941,10 @@ block script
             $('#load-more').click(function () {
                 executeSearch(loadedCount)
             })
+
+            // Set dynamic max date on date inputs
+            var today = new Date().toISOString().split('T')[0]
+            $('#db-feedback-birthdate, #db-feedback-deathdate').attr('max', today)
 
             // Language toggle: preserve query params
             $('.lang-toggle-btn').click(function (e) {
