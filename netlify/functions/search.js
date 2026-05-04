@@ -1,12 +1,27 @@
 const https = require('https')
 
 const INDEX = 'live_persons_index' // emi_persons
+const DEFAULT_SIZE = 200
+const MAX_SIZE = 5000
 
 exports.handler = (event, context, callback) => {
+    let reqBody
+    try {
+        reqBody = JSON.parse(event.body)
+    } catch (e) {
+        reqBody = {}
+    }
+
+    const from = Math.max(0, parseInt(reqBody._from, 10) || 0)
+    const size = Math.min(MAX_SIZE, Math.max(1, parseInt(reqBody._size, 10) || DEFAULT_SIZE))
+
+    delete reqBody._from
+    delete reqBody._size
+
     const options = {
         hostname: '94abc9318c712977e8c684628aa5ea0f.us-east-1.aws.found.io',
         port: 9243,
-        path: '/' + INDEX + '/_search?size=5000&from=0',
+        path: '/' + INDEX + '/_search?size=' + size + '&from=' + from,
         method: 'POST',
         headers: {
             'Authorization': 'Basic cmVhZGVyOnJlYWRlcg==',
@@ -15,8 +30,6 @@ exports.handler = (event, context, callback) => {
     }
 
     const request = https.request(options, response => {
-        // Decode upstream stream as UTF-8 so multi-byte characters split
-        // across TCP chunk boundaries are not corrupted into U+FFFD.
         response.setEncoding('utf8')
         let body = ''
 
@@ -41,6 +54,6 @@ exports.handler = (event, context, callback) => {
         })
     })
 
-    request.write(event.body)
+    request.write(JSON.stringify(reqBody))
     request.end()
 }

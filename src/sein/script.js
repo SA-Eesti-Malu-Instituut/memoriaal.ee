@@ -12,14 +12,8 @@ $(function () {
             }
         },
         sort: { 'perenimi.raw': 'asc', 'eesnimi.raw': 'asc' },
-        _source: [ 'id', 'perenimi', 'eesnimi', 'sünd', 'surm',
-            'isperson', 'kivi', 'emem', 'evo', 'wwii', 'evokirje',
-            'isanimi', 'emanimi', 'perenimed', 'eesnimed',
-            'kirjed.kirje', 'kirjed.kirjekood', 'kirjed.viide', 'kirjed.allikas', 'kirjed.allika_nimetus',
-            'pereseosed.persoon', 'pereseosed.kirje',
-            'pereseosed.seos', 'pereseosed.suund', 'pereseosed.kirjed',
-            'tahvlikirje.kirjekood', 'tahvlikirje.kirje', 'tahvlikirje.tahvel', 'tahvlikirje.tulp', 'tahvlikirje.rida'
-        ]
+        _source: [ 'id', 'perenimi', 'eesnimi', 'sünd', 'surm' ],
+        _size: 5000
     }
     $.ajax('/.netlify/functions/search', {
         data : JSON.stringify(qData),

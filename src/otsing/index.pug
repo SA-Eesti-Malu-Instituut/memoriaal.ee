@@ -128,7 +128,7 @@ block script
                                     search_results: data.hits.total.value,
                                     search_source: 'otsing'
                                 })
-                            } catch (e) { /* analytics must never break search */ }
+                            } catch (e) {}
                         }
 
                         if (idQuery && hits[0]._source.redirect) {

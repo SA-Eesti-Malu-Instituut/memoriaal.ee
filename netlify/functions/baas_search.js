@@ -31,8 +31,6 @@ exports.handler = (event, context, callback) => {
     }
 
     const request = https.request(options, response => {
-        // Decode upstream stream as UTF-8 so multi-byte characters split
-        // across TCP chunk boundaries are not corrupted into U+FFFD.
         response.setEncoding('utf8')
         let body = ''
 
