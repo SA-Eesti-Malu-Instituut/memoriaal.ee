@@ -32,19 +32,25 @@ var triggerWindowResize = function() {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    // fetch episodes from api and add to global episodes array
-    populateEpisodes().then(function(eps) {
-        eps.forEach(function(episode) {
-            episodes.push(episode);
+    // Only fetch episodes if the episode-picker form is actually on this page.
+    // Without this guard, every page on the site would issue a cross-origin
+    // request to the (now retired) Apps Script endpoint and log CORS/403
+    // errors in the console.
+    if (document.getElementById('db-feedback2-episode-select')) {
+        populateEpisodes().then(function(eps) {
+            eps.forEach(function(episode) {
+                episodes.push(episode);
+            });
+        }).catch(function(err) {
+            console.log('Episodes API unavailable:', err && err.message);
         });
-    });
+    }
     prefillFromLocalstorage();
     var submitE = get('db-feedback2-submit');
     if (submitE) {
         submitE.addEventListener('click', submitEpisode);
     }
-    
-    // Trigger resize event to fix resolution and scaling issues
+
     triggerWindowResize();
 });
 
