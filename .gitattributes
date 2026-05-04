@@ -1,15 +1,52 @@
-# Ensure shell scripts use LF
+# Default: LF for detected text files (matches .editorconfig end_of_line = lf)
+* text=auto eol=lf
+
+# Shell & tooling
 *.sh text eol=lf
 
-# Ensure config and dotfiles use LF
-*.toml text eol=lf
-*.yml  text eol=lf
-*.yaml text eol=lf
-*.json text eol=lf
-*.nvmrc text eol=lf
-*.node-version text eol=lf
-*.js   text eol=lf
-*.ts   text eol=lf
-*.py   text eol=lf
+# Repo dotfiles (*.nvmrc does not match .nvmrc in glob rules)
+.nvmrc text eol=lf
+.node-version text eol=lf
+
+# Web, SSG, styles
 *.html text eol=lf
-*.css  text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.ts text eol=lf
+*.map text eol=lf
+*.pug text eol=lf
+*.styl text eol=lf
+*.svg text eol=lf
+
+# Data & config
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.http text eol=lf
+*.webmanifest text eol=lf
+
+# Docs & plain text
+*.md text eol=lf
+*.txt text eol=lf
+LICENSE text eol=lf
+
+# Other source
+*.py text eol=lf
+
+# Binary assets — never apply text/EOL conversion
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.pdf binary
+*.docx binary
