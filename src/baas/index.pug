@@ -653,6 +653,28 @@ block script
                         return
                     }
 
+                    if (from === 0 && typeof gtag === 'function') {
+                        try {
+                            var stParts = []
+                            var qVal = (qs('q') || '').trim()
+                            if (qVal) { stParts.push(qVal) }
+                            var advFields = [
+                                ['fn', qs('fn')], ['sn', qs('sn')], ['bd', qs('bd')],
+                                ['bp', qs('bp')], ['ftn', qs('ftn')], ['mtn', qs('mtn')],
+                                ['ee', qs('ee')]
+                            ]
+                            for (var fi = 0; fi < advFields.length; fi++) {
+                                if (advFields[fi][1]) { stParts.push(advFields[fi][0] + ':' + advFields[fi][1]) }
+                            }
+                            gtag('event', 'search', {
+                                search_term: stParts.join(' '),
+                                search_filter: qs('f') || 'all',
+                                search_results: totalCount,
+                                search_source: 'baas'
+                            })
+                        } catch (e) { /* analytics must never break search */ }
+                    }
+
                     renderHits(hits)
                     loadedCount += hits.length
                     updatePaginationUI()
