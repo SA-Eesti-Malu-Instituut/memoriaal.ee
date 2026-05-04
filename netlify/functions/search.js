@@ -15,7 +15,10 @@ exports.handler = (event, context, callback) => {
     }
 
     const request = https.request(options, response => {
-        var body = ''
+        // Decode upstream stream as UTF-8 so multi-byte characters split
+        // across TCP chunk boundaries are not corrupted into U+FFFD.
+        response.setEncoding('utf8')
+        let body = ''
 
         response.on('data', function (d) {
             body += d
@@ -24,7 +27,7 @@ exports.handler = (event, context, callback) => {
         response.on('end', function () {
             callback(null, {
                 statusCode: 200,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 body: body
             })
         })
@@ -33,8 +36,8 @@ exports.handler = (event, context, callback) => {
     request.on('error', function () {
         callback(null, {
             statusCode: 500,
-            headers: { 'Content-Type': 'application/json' },
-            body: body
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            body: JSON.stringify({ error: 'Elasticsearch request failed' })
         })
     })
 
