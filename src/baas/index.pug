@@ -12,7 +12,7 @@ block content
             p.baas-description.mb-3= self.description
         form#searchForm.form.row(action=(self.locale === 'et' ? '/baas/' : '/en/baas/'), method='GET')
             .col-12
-                input#mainSearchInput.emem-text-input.col-lg-8.col-md-6.col-sm-6(type='search', name='q', placeholder=self.search.placeholder)
+                input#mainSearchInput.emem-text-input.col-lg-8.col-md-6.col-sm-6(type='search', name='q', placeholder=self.search.placeholder, autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', inputmode='search', enterkeyhint='search')
                 button#mainSearchButton.col-lg-2.col-md-3.col-sm-3(
                     type='submit',
                     onclick='return submitForm(event)'
@@ -27,27 +27,27 @@ block content
             #episoodifilter.form-check.col-lg-8.col-md-6.col-sm-12.advanced-section
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qForename')= self.q.eesnimi
-                    input.form-check-input.emem-text-input.col-8(type='search', id='qForename', name='fn', placeholder=self.q.eesnimi)
+                    input.form-check-input.emem-text-input.col-8(type='search', id='qForename', name='fn', placeholder=self.q.eesnimi, autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', enterkeyhint='search')
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qSurname')= self.q.perenimi
-                    input.form-check-input.emem-text-input.col-8(type='search', id='qSurname', name='sn', placeholder=self.q.perenimi)
+                    input.form-check-input.emem-text-input.col-8(type='search', id='qSurname', name='sn', placeholder=self.q.perenimi, autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', enterkeyhint='search')
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qBirthdate')= self.q.synniaeg
-                    input.form-check-input.emem-text-input.col-8(type='search', id='qBirthdate', name='bd', placeholder=self.q.synniaeg)
+                    input.form-check-input.emem-text-input.col-8(type='search', id='qBirthdate', name='bd', placeholder=self.q.synniaeg, autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', inputmode='numeric', enterkeyhint='search')
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qBirthplace')= self.q.synnikoht
-                    input.form-check-input.emem-text-input.col-8(type='search', id='qBirthplace', name='bp', placeholder=self.q.synnikoht)
+                    input.form-check-input.emem-text-input.col-8(type='search', id='qBirthplace', name='bp', placeholder=self.q.synnikoht, autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', enterkeyhint='search')
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qFather')= self.q.isanimi
-                    input.form-check-input.emem-text-input.col-8(type='search', id='qFather', name='ftn', placeholder=self.q.isanimi)
+                    input.form-check-input.emem-text-input.col-8(type='search', id='qFather', name='ftn', placeholder=self.q.isanimi, autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', enterkeyhint='search')
                 .form-check.col-md-12.my-2
                     label.form-check-label.col-4.padding(for='qMother')= self.q.emanimi
-                    input.form-check-input.emem-text-input.col-8(type='search', id='qMother', name='mtn', placeholder=self.q.emanimi)
+                    input.form-check-input.emem-text-input.col-8(type='search', id='qMother', name='mtn', placeholder=self.q.emanimi, autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', enterkeyhint='search')
                 hr
                 .form-check.col-md-12.my-2.elukoht-row
                     label.form-check-label.col-4.padding(for='episoodElukoht')= self.q.episood_elukoht
                     .elukoht-autocomplete.col-8
-                        input.form-check-input.emem-text-input(type='search', id='episoodElukoht', name='ee', placeholder=self.q.episood_elukoht, value='', autocomplete='off')
+                        input.form-check-input.emem-text-input(type='search', id='episoodElukoht', name='ee', placeholder=self.q.episood_elukoht, value='', autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', enterkeyhint='search')
                         #elukohtSuggestions.autocomplete-suggestions.d-none
                 datalist#elukohtList
                     option(value='Aakre vald' data-key='AAKRE V')
