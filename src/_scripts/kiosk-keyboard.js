@@ -260,6 +260,14 @@
         document.head.appendChild(style)
     }
 
+    function onOutside(e) {
+        if (!root || !root.classList.contains('is-open')) { return }
+        var t = e.target
+        if (root.contains(t)) { return }   // tap on the keyboard itself
+        if (isTextField(t)) { return }      // tap on another field -> let focusin switch to it
+        hide()
+    }
+
     function init() {
         injectCss()
         document.addEventListener('focusin', function (e) {
@@ -268,6 +276,10 @@
                 show()
             }
         }, false)
+
+        // Tap anywhere outside the keyboard (and not on a text field) closes it.
+        var outsideEvt = window.PointerEvent ? 'pointerdown' : 'touchstart'
+        document.addEventListener(outsideEvt, onOutside, true)
     }
 
     if (document.readyState === 'loading') {
