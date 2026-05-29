@@ -66,10 +66,23 @@ button
     border none
     border-radius 0
     outline none
+    // Snappier taps (no 300ms delay / double-tap zoom) so the OS keyboard
+    // comes up immediately on tablets.
+    touch-action manipulation
 
     &:focus
     &:active
         outline none
+
+// Keep text fields selectable even when select.js disables selection on the
+// body for non-whitelisted hosts, so tablets can place a caret and raise the
+// native on-screen keyboard.
+input
+textarea
+    -webkit-user-select text
+    -moz-user-select text
+    -ms-user-select text
+    user-select text
 
 input
     color rgb(0, 0, 0)
