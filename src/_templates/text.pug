@@ -7,7 +7,7 @@
                 br
     #text-title.row.mt-4
         h1.col-12.col-lg-8
-            a(href=self.path)= self.title
+            a(href=/\/otsing$/.test(self.path) ? self.root : self.path)= self.title
     #text-content.row.mt-5.pb-1
         block content
             .col-12.col-md-8.col-lg-9.col-xl-6
