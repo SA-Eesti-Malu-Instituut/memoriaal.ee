@@ -4,8 +4,10 @@ extends /_templates/baas_layout.pug
 block content
     #search.col-12
         .baas-header
-            h3.mb-1= self.title
-            .small.text-muted.mb-2 - Eesti Mälu ja Migratsiooni Andmestu
+            h3.baas-title
+                span.baas-title-name= self.title
+                if self.subtitle
+                    span.baas-subtitle= ' – ' + self.subtitle
             .lang-toggle
                 a.lang-toggle-btn(href='/baas/', class=(self.locale === 'et' ? 'active' : '')) Eesti
                 a.lang-toggle-btn(href='/en/baas/', class=(self.locale === 'en' ? 'active' : '')) English
