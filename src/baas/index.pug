@@ -9,7 +9,8 @@ block content
                 a.lang-toggle-btn(href='/baas/', class=(self.locale === 'et' ? 'active' : '')) Eesti
                 a.lang-toggle-btn(href='/en/baas/', class=(self.locale === 'en' ? 'active' : '')) English
         if self.description
-            p.baas-description.mb-3= self.description
+            p.baas-description.mb-3
+                +markdown(self.description)
         form#searchForm.form.row(action=(self.locale === 'et' ? '/baas/' : '/en/baas/'), method='GET')
             .col-12
                 input#mainSearchInput.emem-text-input.col-lg-8.col-md-6.col-sm-6(type='search', name='q', placeholder=self.search.placeholder, autocomplete='off', autocapitalize='none', autocorrect='off', spellcheck='false', inputmode='search', enterkeyhint='search')
