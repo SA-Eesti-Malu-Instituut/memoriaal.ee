@@ -1,5 +1,10 @@
 title: EMMA
-description: Eesti Mälu ja Migratsiooni Andmestu 
+description: |
+    EMMA on Eesti Mälu Instituudi hallatav avalik andmestu, koondab teavet ligikaudu 175 tuhande Eesti inimese kohta, neist umbes 90 tuhat on Nõukogude okupatsioonivõimu ohvrid ning 70 tuhat Teise maailmasõja ajal kodumaalt põgenenud. Andmed pärinevad eri riikide arhiividest ja publitseeritud materjalidest ning on esitatud allika põhiselt.
+
+    See on asendamatu tööriist nii ajaloolastele kui ka suguvõsauurijatele, võimaldades detailseid otsinguid inimeste saatuse kohta.
+
+    EMMA andmed on dubleeritud [Eesti kommunismiohvrite e-memoriaalis](https://www.memoriaal.ee/) ning [Eesti sõjapõgenike andmebaasis](https://2024.wwii-refugees.ee).
 pictures:
     - /images/bg/andmebaas.jpg
 q:
