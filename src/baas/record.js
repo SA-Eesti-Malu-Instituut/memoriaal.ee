@@ -9,6 +9,21 @@
  * `locale` is the content of the page's #baas-locale block, see index.pug.
  */
 globalThis.baasRecord = (function () {
+    // What is shown of a record. The page and baas-person.js both ask the search
+    // for exactly these, so a record looks the same whichever way it arrives.
+    const fields = [
+        'redirect',
+        'isperson', 'kivi', 'emem', 'evo', 'wwii', 'evokirje', 'mv',
+        'perenimi', 'eesnimi', 'isanimi', 'emanimi', 'perenimed', 'eesnimed',
+        'sünd', 'surm', 'sünnikoht', 'surmakoht', 'id',
+        'kirjed.kirje', 'kirjed.kirjekood', 'kirjed.viide', 'kirjed.allikas', 'kirjed.allika_nimetus',
+        'pereseosed.persoon', 'pereseosed.kirje',
+        'pereseosed.seos', 'pereseosed.suund', 'pereseosed.kirjed',
+        'tahvlikirje.kirjekood', 'tahvlikirje.kirje', 'tahvlikirje.tahvel', 'tahvlikirje.tulp', 'tahvlikirje.rida',
+        'episoodid.kirjekood', 'episoodid.asukoht', 'episoodid.nimetus',
+        'created_at', 'updated_at'
+    ]
+
     const esc = (text) => String(text == null ? '' : text)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -63,5 +78,5 @@ globalThis.baasRecord = (function () {
         return lead.replace(/\.$/, '') + '. ' + locale.summary
     }
 
-    return { esc, name, slug, path, place, years, title, description }
+    return { fields, esc, name, slug, path, place, years, title, description }
 })()

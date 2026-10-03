@@ -998,18 +998,7 @@ block script
             const qData = {
                 query : { bool : { must : [] } },
                 sort: { 'eesnimi.raw': 'asc', 'perenimi.raw': 'asc' },
-                _source: [
-                    'redirect',
-                    'isperson', 'kivi', 'emem', 'evo', 'wwii', 'evokirje', 'mv',
-                    'perenimi', 'eesnimi', 'isanimi', 'emanimi', 'perenimed', 'eesnimed',
-                    'sünd', 'surm','sünnikoht','surmakoht', 'id',
-                    'kirjed.kirje', 'kirjed.kirjekood', 'kirjed.viide', 'kirjed.allikas', 'kirjed.allika_nimetus',
-                    'pereseosed.persoon', 'pereseosed.kirje',
-                    'pereseosed.seos', 'pereseosed.suund', 'pereseosed.kirjed',
-                    'tahvlikirje.kirjekood', 'tahvlikirje.kirje', 'tahvlikirje.tahvel', 'tahvlikirje.tulp', 'tahvlikirje.rida',
-                    'episoodid.kirjekood', 'episoodid.asukoht', 'episoodid.nimetus',
-                    'created_at', 'updated_at'
-                ]
+                _source: baasRecord.fields
             }
 
             if (idQuery) {

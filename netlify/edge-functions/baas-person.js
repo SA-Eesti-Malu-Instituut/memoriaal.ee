@@ -14,7 +14,7 @@
  */
 import '../../src/baas/record.js'
 
-const { esc, name, path, place, title, description } = globalThis.baasRecord
+const { fields, esc, name, path, place, title, description } = globalThis.baasRecord
 
 const SEARCH = '/.netlify/functions/baas_search'
 const RECORD_PATH = /^(\/(?:en\/)?baas\/)(\d{10})(?:\/[^/]*)?\/?$/
@@ -35,7 +35,7 @@ const lookup = async (origin, id) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             query: { match: { id } },
-            _source: { excludes: ['searchable_text', 'pereseosed.relationship_text'] },
+            _source: fields,
             _size: 1
         }),
         signal: AbortSignal.timeout(5000)
@@ -73,7 +73,7 @@ const structured = (record, locale, url) => {
             '@type': 'CreativeWork',
             name: kirje.allika_nimetus || kirje.allikas,
             identifier: kirje.kirjekood,
-            url: kirje.viide || undefined
+            url: /^https?:\/\//.test(kirje.viide || '') ? kirje.viide : undefined   // some are archive shelf marks
         }))
 
     return {
