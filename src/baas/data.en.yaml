@@ -1,6 +1,6 @@
 path: baas
 title: EMMA
-subtitle: Estonian Memorial & Migration Dataset
+subtitle: Estonian Memory and Migration Database
 pictures:
     - /images/bg/andmebaas.jpg
 q:
@@ -41,7 +41,7 @@ record:
     notFound: Record not found
     bornShort: b.
     deadShort: d.
-    summary: Record in EMMA, the Estonian Memorial & Migration Dataset of the Estonian Institute of Historical Memory.
+    summary: Record in EMMA, the Estonian Memory and Migration Database of the Estonian Institute of Historical Memory.
     source:
         maintainedBy: Maintained by
         maintainer: Estonian Institute of Historical Memory
@@ -51,7 +51,7 @@ record:
         permalink: Permalink
         copy: Copy
         citation: Source citation
-        reference: '%author%. (n.d.). %title% [Database record No. %id%]. In <em>%dataset%</em>. Retrieved %accessed%, from %url%'
+        reference: 'Estonian Institute of Historical Memory, "Record: %name%," %dataset%, accessed %accessed%, %url%.'
 
 feedback:
     button: Feedback

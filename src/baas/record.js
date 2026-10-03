@@ -33,6 +33,13 @@ globalThis.baasRecord = (function () {
     // 'ILMAR-JAAN TAMM'
     const name = (p) => [p.eesnimi, p.perenimi].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim()
 
+    // Names are kept in capitals, this is one as it is written in a sentence:
+    // 'MARTA-HERMINE EHASTE' -> 'Marta-Hermine Ehaste', 'OTTO VON ESSEN' -> 'Otto von Essen'
+    const small = ['von', 'van', 'de', 'der', 'zu', 'af', 'al', 'ja', 'või', 'ehk', 'sünd', 'snd']
+    const properName = (p) => name(p).toLowerCase().replace(/[^\s\-/.,;:()'"<>?]+/g, (word) => (
+        small.includes(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)
+    ))
+
     // 'JÜRI ÕUN' -> 'JURI-OUN', the readable tail of a record's address.
     // Only the id finds the record, so this may change when the name is corrected.
     const slug = (p) => name(p)
@@ -78,5 +85,5 @@ globalThis.baasRecord = (function () {
         return lead.replace(/\.$/, '') + '. ' + locale.summary
     }
 
-    return { fields, esc, name, slug, path, place, years, title, description }
+    return { fields, esc, name, properName, slug, path, place, years, title, description }
 })()

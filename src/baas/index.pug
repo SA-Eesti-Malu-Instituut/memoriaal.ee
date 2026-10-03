@@ -751,11 +751,9 @@ block script
             var source = LOCALE.source
             var esc = baasRecord.esc
             var link = '<a href="' + url + '">'
-            // an APA 7 reference, the sentence itself is source.reference in data.<locale>.yaml
+            // the reference as the institute cites EMMA, the sentence itself is source.reference in data.<locale>.yaml
             var parts = {
-                author: source.maintainer,
-                title: esc(baasRecord.title(p, LOCALE)),
-                id: p.id,
+                name: esc(baasRecord.properName(p) || p.id),
                 dataset: esc(LOCALE.dataset),
                 accessed: new Date().toLocaleDateString(LOCALE.lang === 'en' ? 'en-US' : LOCALE.lang, { day: 'numeric', month: 'long', year: 'numeric' }),
                 url: link + url + '</a>'
