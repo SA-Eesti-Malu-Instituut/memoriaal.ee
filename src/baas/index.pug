@@ -555,7 +555,7 @@ block script
                         a1 = '<a href="' + kirje.viide + '" target="_blank">'
                         a2 = '</a>'
                     }
-                    text.push('<p class="mt-2 mb-0"><strong>' + a1 + kirje.allikas + a2 + ' ' + kirje.kirjekood + '<span class="crossfade" clip="' + kirje.kirjekood + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>' + ' </strong></p>')
+                    text.push('<p class="mt-2 mb-0"><strong>' + a1 + kirje.allikas + a2 + ' ' + kirje.kirjekood + copyIcon(kirje.kirjekood) + ' </strong></p>')
                     if (kirje.kirje) {
                         text.push('<p class="mb-1">')
                         text.push(replaceLinebreaks(kirje.kirje))
@@ -743,7 +743,7 @@ block script
         }
 
         function copyIcon(text) {
-            return '<span class="crossfade" clip="' + baasRecord.esc(text) + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>'
+            return '<span class="crossfade" clip="' + baasRecord.esc(text) + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png" alt="' + LOCALE.source.copy + '"/><img src="/images/clip-n-check-512.png" alt="" class="transparent"/></span>'
         }
 
         // Who keeps the record and how to refer to it - the #source block under a single record
@@ -788,7 +788,7 @@ block script
             // rest (?q=<id>, a function that failed) catches up here
             document.title = title + ' · ' + LOCALE.dataset
             if (!$('meta[name="description"]').length) { $('head').append('<meta name="description">') }
-            $('meta[name="description"]').attr('content', baasRecord.description(p, LOCALE))
+            $('meta[name="description"], meta[property="og:description"]').attr('content', baasRecord.description(p, LOCALE))
             $('link[rel="canonical"]').attr('href', url)
             $('meta[property="og:url"]').attr('content', url)
             $('meta[property="og:title"]').attr('content', title)

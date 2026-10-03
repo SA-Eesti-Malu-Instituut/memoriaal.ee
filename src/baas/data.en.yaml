@@ -49,6 +49,7 @@ record:
         added: Added
         id: Memoriaal ID
         permalink: Permalink
+        copy: Copy
         citation: Source citation
         reference: '%author%. (n.d.). %title% [Database record No. %id%]. In <em>%dataset%</em>. Retrieved %accessed%, from %url%'
 

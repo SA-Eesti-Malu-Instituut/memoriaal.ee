@@ -1,7 +1,9 @@
 block vars
 
-//- Name of the dataset, address of this page and of the same page in other languages
+//- Name of the dataset and what it is (the first paragraph of the introduction),
+//- address of this page and of the same page in other languages
 - var dataset = self.subtitle ? self.title + ' – ' + self.subtitle : self.title
+- var about = (self.description || '').split('\n')[0].replace(/<[^>]+>/g, '')
 - var site = 'https://www.memoriaal.ee'
 - var root = self.path + '/'
 - var alternates = [{ lang: self.locale, root: root }]
@@ -23,12 +25,16 @@ html(lang=self.locale)
         //- replaced by netlify/edge-functions/baas-person.js
         <!--!seo-->
         title= self.title && self.title !== self.siteTitle ? self.title + ' · ' + self.siteTitle : self.siteTitle
+        if about
+            meta(name='description', content=about)
         link(rel='canonical', href=site + root)
         each alternate in alternates
             link(rel='alternate', hreflang=alternate.lang, href=site + alternate.root)
         meta(property='og:type', content='website')
         meta(property='og:url', content=site + root)
         meta(property='og:title', content=self.title ? self.title + ' · ' + self.siteTitle : self.siteTitle)
+        if about
+            meta(property='og:description', content=about)
         <!--!/seo-->
         meta(property='og:site_name', content=dataset)
         meta(property='og:locale', content={ et: 'et_EE', en: 'en_GB', ru: 'ru_RU' }[self.locale])

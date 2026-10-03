@@ -54,6 +54,7 @@ record:
         added: Lisatud
         id: Memoriaali ID
         permalink: Püsilink
+        copy: Kopeeri
         citation: Viide
         reference: '%author%. (kuupäev puudub). %title% [Andmebaasi kirje nr %id%]. <em>%dataset%</em>. Loetud %accessed% aadressil %url%'
 
