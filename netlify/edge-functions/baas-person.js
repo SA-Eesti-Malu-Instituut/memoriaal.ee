@@ -86,7 +86,7 @@ const structured = (record, locale, url) => {
                 name: title(record, locale),
                 description: description(record, locale),
                 inLanguage: locale.lang,
-                isPartOf: { '@type': 'WebSite', name: locale.siteTitle, url: locale.home },
+                isPartOf: { '@type': 'WebSite', name: locale.dataset, url: locale.site + locale.root },
                 mainEntity: { '@id': url + '#person' },
                 breadcrumb: { '@id': url + '#breadcrumb' },
                 publisher: { '@type': 'Organization', name: locale.source.maintainer, url: locale.home },
@@ -112,9 +112,8 @@ const structured = (record, locale, url) => {
                 '@type': 'BreadcrumbList',
                 '@id': url + '#breadcrumb',
                 itemListElement: [
-                    { '@type': 'ListItem', position: 1, name: locale.siteTitle, item: locale.home },
-                    { '@type': 'ListItem', position: 2, name: locale.dataset, item: locale.site + locale.root },
-                    { '@type': 'ListItem', position: 3, name: title(record, locale) }
+                    { '@type': 'ListItem', position: 1, name: locale.dataset, item: locale.site + locale.root },
+                    { '@type': 'ListItem', position: 2, name: title(record, locale) }
                 ]
             }
         ]
