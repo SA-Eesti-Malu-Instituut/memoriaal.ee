@@ -533,7 +533,7 @@ block script
 
                 if (p.isanimi) { text.push('<p class="mb-0">#{self.result.father}: ' + p.isanimi + '</p>') }
                 if (p.emanimi) { text.push('<p class="mb-0">#{self.result.mother}: ' + p.emanimi + '</p>') }
-                text.push('<p class="mb-0"># <a href="' + baasRecord.path(LOCALE.root, p) + '">' + p.id + '</a>')
+                text.push('<p class="mb-0"># <a href="' + baasRecord.path(LOCALE.root, p) + '#source">' + p.id + '</a>')
                 text.push('<span class="crossfade" clip="' + p.id + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>')
                 text.push('</p>')
                 if (p.updated_at) {
@@ -748,19 +748,16 @@ block script
             var source = LOCALE.source
             var esc = baasRecord.esc
             var link = '<a href="' + url + '">'
-            var today = new Date()
-            var accessed = LOCALE.lang === 'et'
-                ? today.toLocaleDateString('et') // 3.10.2026
-                : today.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) // 3 October 2026
-            var sources = (p.kirjed || [])
-                .map(function (kirje) { return (kirje.allikas || '').replace(/\.$/, '') })
-                .filter(function (allikas, i, all) { return allikas && all.indexOf(allikas) === i })
-            var citation = '<em>' + esc(LOCALE.dataset) + '</em>, ' + source.database
-                + ' (' + link + url + '</a>: ' + source.accessed + ' ' + accessed + '), '
-                + source.record + ' ' + esc(baasRecord.title(p, LOCALE)) + ', '
-                + source.id + ' ' + link + p.id + '</a>'
-                + (sources.length ? ', ' + source.citing + ': ' + esc(sources.join('; ')) : '')
-                + '; <b>' + source.maintainedBy + ':</b> ' + source.maintainer + '.'
+            // an APA 7 reference, the sentence itself is source.reference in data.<locale>.yaml
+            var parts = {
+                author: source.maintainer,
+                title: esc(baasRecord.title(p, LOCALE)),
+                id: p.id,
+                dataset: esc(LOCALE.dataset),
+                accessed: new Date().toLocaleDateString(LOCALE.lang === 'en' ? 'en-US' : LOCALE.lang, { day: 'numeric', month: 'long', year: 'numeric' }),
+                url: link + url + '</a>'
+            }
+            var reference = source.reference.replace(/%(\w+)%/g, function (all, part) { return parts[part] })
 
             return '<section class="record-source" id="source" aria-label="' + source.citation + '"><ul>'
                 + '<li><b>' + source.maintainedBy + ':</b> ' + source.maintainer
@@ -768,8 +765,8 @@ block script
                 + (p.created_at ? '<li><b>' + source.added + ':</b> ' + esc(String(p.created_at).slice(0, 10)) + '</li>' : '')
                 + '<li><b>' + source.id + ':</b> ' + p.id + copyIcon(p.id) + '</li>'
                 + '<li><b>' + source.permalink + ':</b> ' + link + url + '</a>' + copyIcon(url) + '</li>'
-                + '<li><details open><summary>' + source.citation + '</summary>'
-                + '<p>' + citation + copyIcon($('<p>').html(citation).text()) + '</p></details></li>'
+                + '<li><details><summary>' + source.citation + '</summary>'
+                + '<p>' + reference + copyIcon($('<p>').html(reference).text()) + '</p></details></li>'
                 + '</ul></section>'
         }
 

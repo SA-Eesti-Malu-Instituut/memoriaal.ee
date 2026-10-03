@@ -44,16 +44,13 @@ record:
     summary: Record in EMMA, the Estonian Memorial & Migration Dataset of the Estonian Institute of Historical Memory.
     source:
         maintainedBy: Maintained by
-        maintainer: Estonian Institute of Historical Memory (SA Eesti Mälu Instituut)
+        maintainer: Estonian Institute of Historical Memory
         about: About this manager
         added: Added
         id: Memoriaal ID
         permalink: Permalink
         citation: Source citation
-        database: database
-        accessed: accessed
-        record: record for
-        citing: citing
+        reference: '%author%. (n.d.). %title% [Database record No. %id%]. In <em>%dataset%</em>. Retrieved %accessed%, from %url%'
 
 feedback:
     button: Feedback

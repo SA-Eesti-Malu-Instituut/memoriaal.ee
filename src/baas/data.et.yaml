@@ -55,10 +55,7 @@ record:
         id: Memoriaali ID
         permalink: Püsilink
         citation: Viide
-        database: andmebaas
-        accessed: vaadatud
-        record: kirje
-        citing: allikad
+        reference: '%author%. (kuupäev puudub). %title% [Andmebaasi kirje nr %id%]. <em>%dataset%</em>. Loetud %accessed% aadressil %url%'
 
 feedback:
     button: Tagasiside
