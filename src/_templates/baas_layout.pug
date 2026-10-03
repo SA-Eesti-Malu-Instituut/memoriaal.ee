@@ -1,6 +1,7 @@
 block vars
 
-//- Address of this page and of the same page in other languages
+//- Name of the dataset, address of this page and of the same page in other languages
+- var dataset = self.subtitle ? self.title + ' – ' + self.subtitle : self.title
 - var site = 'https://www.memoriaal.ee'
 - var root = self.path + '/'
 - var alternates = [{ lang: self.locale, root: root }]
@@ -29,6 +30,8 @@ html(lang=self.locale)
         meta(property='og:url', content=site + root)
         meta(property='og:title', content=self.title ? self.title + ' · ' + self.siteTitle : self.siteTitle)
         <!--!/seo-->
+        meta(property='og:site_name', content=dataset)
+        meta(property='og:locale', content={ et: 'et_EE', en: 'en_GB', ru: 'ru_RU' }[self.locale])
         meta(property='og:image', content=site + '/memoriaal-og.jpg')
         meta(name='twitter:card', content='summary_large_image')
 
