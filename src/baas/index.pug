@@ -337,6 +337,9 @@ block content
                     label.form-check-label(for='filter_'+self.search.radio.none)= self.search.radio.none || 'nonrelevant'
         p#search-count.mt-2.mb-4
         #search-results
+            //- On the page of a single record netlify/edge-functions/baas-person.js
+            //- puts a plain summary of it here, for readers that do not run scripts
+            <!--!record-->
         #pagination.text-center.mt-3.d-none
             button#load-more.btn.btn-primary= self.pagination.loadMore
             p#pagination-status.mt-2
@@ -417,8 +420,31 @@ block content
             p#db-feedback-error.col-12.d-none.text-danger= self.feedback.error
 
 block script
+    //- Texts and addresses of this language version for record.js - read by the
+    //- script below and by netlify/edge-functions/baas-person.js
+    -
+        var locale = Object.assign({}, self.record, {
+            lang: self.locale,
+            site: site,
+            root: root,
+            alternates: alternates,
+            home: site + self.root,
+            siteTitle: self.siteTitle,
+            title: self.title,
+            dataset: self.subtitle ? self.title + ' – ' + self.subtitle : self.title,
+            born: self.result.born,
+            dead: self.result.dead,
+            father: self.result.father,
+            mother: self.result.mother
+        })
+    script#baas-locale(type='application/json')!= JSON.stringify(locale).replace(/</g, '\\u003c')
+    script
+        include record.js
     script.
         const PAGE_SIZE = 200
+        const LOCALE = JSON.parse(document.getElementById('baas-locale').textContent)
+        // A record's own address - /baas/<id>/<NAME>, see record.js
+        const RECORD_PATH = new RegExp('^' + LOCALE.root + '(\\d{10})(?:/|$)')
         let totalCount = 0
         let loadedCount = 0
         let isLoading = false
@@ -487,9 +513,12 @@ block script
                 text.push('</div>')
                 text.push('<div class="row">')
 
-                text.push('<h3 class="search-result-name col-12 mb-2 mb-1">' + (p.eesnimi ? p.eesnimi : '') + ' ' + p.perenimi
-                    + ' <a href="https://www.google.com/search?q=%22' + p.eesnimi + '%20' + p.perenimi + '%22" target="_blank" class="google-search"><i class="fas fa-search">G</i></a>'
-                    + '</h3>')
+                // the name is the main heading on a record's own page and one of many in a list
+                const heading = isIdSearchQuery ? 'h1' : 'h3'
+                const name = baasRecord.name(p)
+                text.push('<' + heading + ' class="search-result-name col-12 mb-2 mb-1">' + baasRecord.esc(name)
+                    + ' <a href="https://www.google.com/search?q=' + encodeURIComponent('"' + name + '"') + '" target="_blank" class="google-search"><i class="fas fa-search">G</i></a>'
+                    + '</' + heading + '>')
 
                 text.push('<div class="col-5 col-sm-3">')
                 if (p.sünd) {
@@ -506,16 +535,7 @@ block script
 
                 if (p.isanimi) { text.push('<p class="mb-0">#{self.result.father}: ' + p.isanimi + '</p>') }
                 if (p.emanimi) { text.push('<p class="mb-0">#{self.result.mother}: ' + p.emanimi + '</p>') }
-                let pub_a = pub_b = ''
-                if (p.wwii) {
-                    pub_a = '<a href="https://wwii-refugees.ee/?q=' + p.id + '">'
-                    pub_b = '</a>'
-                }
-                if (p.emem) {
-                    pub_a = '<a href="/baas/?q=' + p.id + '&f=all">'
-                    pub_b = '</a>'
-                }
-                text.push('<p class="mb-0"># ' + pub_a + p.id + pub_b)
+                text.push('<p class="mb-0"># <a href="' + baasRecord.path(LOCALE.root, p) + '">' + p.id + '</a>')
                 text.push('<span class="crossfade" clip="' + p.id + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>')
                 text.push('</p>')
                 if (p.updated_at) {
@@ -549,7 +569,7 @@ block script
                             pereseos = '(' + pereseos + ')'
                         }
                         let perekirjed = p.pereseosed[ip].kirjed
-                        text.push('<li class="my-0 pereliige"><a href="/baas/?q=' + p.pereseosed[ip].persoon + '&f=all">' + p.pereseosed[ip].persoon + ' ' + pereseos + '</a>')
+                        text.push('<li class="my-0 pereliige"><a href="' + LOCALE.root + p.pereseosed[ip].persoon + '">' + p.pereseosed[ip].persoon + ' ' + pereseos + '</a>')
                         text.push(' : <span onclick="document.querySelector(\'#perekirjed-' + p.pereseosed[ip].persoon + '\').showModal()">' + p.pereseosed[ip].kirje + '</span>')
                         text.push('</li>')
                         text.push('<dialog class="perekirjed" id="perekirjed-' + p.pereseosed[ip].persoon + '">')
@@ -627,7 +647,7 @@ block script
             }
         }
 
-        function executeSearch(from) {
+        function executeSearch(from, handed) {
             if (isLoading) return
             isLoading = true
 
@@ -639,7 +659,7 @@ block script
             payload._from = from
             payload._size = PAGE_SIZE
 
-            $.ajax('/.netlify/functions/baas_search', {
+            var request = {
                 data: JSON.stringify(payload),
                 contentType: 'application/json',
                 type: 'POST',
@@ -653,11 +673,12 @@ block script
                     var hits = data.hits.hits
 
                     if (isIdSearchQuery && hits.length > 0 && hits[0]._source.redirect) {
-                        window.location.href = '?q=' + hits[0]._source.redirect
+                        window.location.href = LOCALE.root + hits[0]._source.redirect
                         return
                     }
 
-                    if (from === 0 && typeof gtag === 'function') {
+                    // opening a record by its address is not a search
+                    if (from === 0 && typeof gtag === 'function' && !RECORD_PATH.test(location.pathname)) {
                         try {
                             var stParts = []
                             var qVal = (qs('q') || '').trim()
@@ -683,6 +704,10 @@ block script
                     loadedCount += hits.length
                     updatePaginationUI()
 
+                    if (isIdSearchQuery && hits.length === 1) {
+                        showRecord(hits[0]._source)
+                    }
+
                     if (typeof triggerResizeAfterSearchUpdate === 'function') {
                         triggerResizeAfterSearchUpdate()
                     }
@@ -692,11 +717,98 @@ block script
                     console.log(error)
                     $('#load-more').prop('disabled', false).text('#{self.pagination.loadMore}')
                 }
+            }
+
+            // the record of a /baas/<id>/<NAME> page comes along with the page, nothing to ask for
+            if (handed) {
+                request.success(handed)
+            } else {
+                $.ajax('/.netlify/functions/baas_search', request)
+            }
+        }
+
+        // The record handed over by netlify/edge-functions/baas-person.js, shaped
+        // like a search response
+        function handedRecord(id) {
+            try {
+                var handed = JSON.parse(document.getElementById('baas-record').textContent)
+                if (!id || handed.id !== id) { return null }
+                var hits = handed.record ? [{ _source: handed.record }] : []
+
+                return { hits: { total: { value: hits.length }, hits: hits } }
+            } catch (e) {
+                return null
+            }
+        }
+
+        function copyIcon(text) {
+            return '<span class="crossfade" clip="' + baasRecord.esc(text) + '" onClick="copy2clipboard(this)"><img src="/images/clip-512.png"/><img src="/images/clip-n-check-512.png" class="transparent"/></span>'
+        }
+
+        // Who keeps the record and how to refer to it - the #source block under a single record
+        function sourceBlock(p, url) {
+            var source = LOCALE.source
+            var esc = baasRecord.esc
+            var link = '<a href="' + url + '">'
+            var today = new Date()
+            var accessed = LOCALE.lang === 'et'
+                ? today.toLocaleDateString('et') // 3.10.2026
+                : today.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) // 3 October 2026
+            var sources = (p.kirjed || [])
+                .map(function (kirje) { return (kirje.allikas || '').replace(/\.$/, '') })
+                .filter(function (allikas, i, all) { return allikas && all.indexOf(allikas) === i })
+            var citation = '<em>' + esc(LOCALE.dataset) + '</em>, ' + source.database
+                + ' (' + link + url + '</a>: ' + source.accessed + ' ' + accessed + '), '
+                + source.record + ' ' + esc(baasRecord.title(p, LOCALE)) + ', '
+                + source.id + ' ' + link + p.id + '</a>'
+                + (sources.length ? ', ' + source.citing + ': ' + esc(sources.join('; ')) : '')
+                + '; <b>' + source.maintainedBy + ':</b> ' + source.maintainer + '.'
+
+            return '<section class="record-source" id="source" aria-label="' + source.citation + '"><ul>'
+                + '<li><b>' + source.maintainedBy + ':</b> ' + source.maintainer
+                + ' <span class="mx-2">•</span> <a href="' + LOCALE.home + '">' + source.about + '</a></li>'
+                + (p.created_at ? '<li><b>' + source.added + ':</b> ' + esc(String(p.created_at).slice(0, 10)) + '</li>' : '')
+                + '<li><b>' + source.id + ':</b> ' + p.id + copyIcon(p.id) + '</li>'
+                + '<li><b>' + source.permalink + ':</b> ' + link + url + '</a>' + copyIcon(url) + '</li>'
+                + '<li><details open><summary>' + source.citation + '</summary>'
+                + '<p>' + citation + copyIcon($('<p>').html(citation).text()) + '</p></details></li>'
+                + '</ul></section>'
+        }
+
+        // A single record gets its own address and title, and the #source block
+        function showRecord(p) {
+            var path = baasRecord.path(LOCALE.root, p)
+            var url = LOCALE.site + path
+            var title = baasRecord.title(p, LOCALE)
+
+            // found by ?q=<id> or under an outdated name - show the address to share
+            if (location.pathname.replace(/\/$/, '') !== path) {
+                history.replaceState({}, '', path + (RECORD_PATH.test(location.pathname) ? location.search : '') + location.hash)
+            }
+
+            // baas-person.js has already done this for the page it served, the
+            // rest (?q=<id>, a function that failed) catches up here
+            document.title = title + ' · ' + LOCALE.dataset
+            if (!$('meta[name="description"]').length) { $('head').append('<meta name="description">') }
+            $('meta[name="description"]').attr('content', baasRecord.description(p, LOCALE))
+            $('link[rel="canonical"]').attr('href', url)
+            $('meta[property="og:url"]').attr('content', url)
+            $('meta[property="og:title"]').attr('content', title)
+            LOCALE.alternates.forEach(function (alternate) {
+                $('link[hreflang="' + alternate.lang + '"]').attr('href', LOCALE.site + baasRecord.path(alternate.root, p))
             })
+
+            $('#search-results').append(sourceBlock(p, url))
+
+            if (location.hash === '#source') {
+                document.getElementById('source').scrollIntoView()
+            }
         }
 
         $(function () {
-            const query = qs('q') || ''
+            // a record's own address works like a search for its id
+            const recordId = (location.pathname.match(RECORD_PATH) || [])[1]
+            const query = recordId || qs('q') || ''
             let filter = qs('f') || 'all'
 
             const qEesnimi = qs('fn')
@@ -898,7 +1010,7 @@ block script
                     'pereseosed.seos', 'pereseosed.suund', 'pereseosed.kirjed',
                     'tahvlikirje.kirjekood', 'tahvlikirje.kirje', 'tahvlikirje.tahvel', 'tahvlikirje.tulp', 'tahvlikirje.rida',
                     'episoodid.kirjekood', 'episoodid.asukoht', 'episoodid.nimetus',
-                    'updated_at'
+                    'created_at', 'updated_at'
                 ]
             }
 
@@ -961,7 +1073,7 @@ block script
             // Check if there's a search to execute
             var hasQuery = query.length > 0 || qEesnimi || qPerenimi || qSynniaeg || qSynnikoht || qIsanimi || qEmanimi || eElukoht
             if (hasQuery) {
-                executeSearch(0)
+                executeSearch(0, handedRecord(recordId))
             }
 
             $('#load-more').click(function () {
@@ -972,12 +1084,13 @@ block script
             var today = new Date().toISOString().split('T')[0]
             $('#db-feedback-birthdate, #db-feedback-deathdate').attr('max', today)
 
-            // Language toggle: preserve query params
+            // Language toggle: preserve query params and the record that is open
             $('.lang-toggle-btn').click(function (e) {
                 e.preventDefault()
                 var targetPath = $(this).attr('href')
                 var currentSearch = window.location.search
-                window.location.href = targetPath + currentSearch
+                var currentRecord = RECORD_PATH.test(window.location.pathname) ? window.location.pathname.slice(LOCALE.root.length) : ''
+                window.location.href = targetPath + currentRecord + currentSearch
             })
 
             $('#search-results').on('click', '.search-result-feedback', function () {

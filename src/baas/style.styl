@@ -271,7 +271,8 @@
             > .row
                 margin 0
 
-            h3.search-result-name
+            // h3 in a list of results, h1 on the page of a single record
+            .search-result-name
                 padding 0.4em 0.75em
                 margin 0
                 font-size 1em
@@ -331,6 +332,37 @@
 
         .nonperson
             background-color hsla(351, 52%, 43%, 0.6)
+
+        // Who keeps the record and how to refer to it, under a single record (#source)
+        .record-source
+            background hsla(0, 0%, 8%, 0.7)
+            border-radius 0.4em
+            margin-bottom 1em
+            padding 0.75em
+            font-size 0.8em
+            line-height 1.4
+            scroll-margin-top 1em
+
+            ul
+                list-style none
+                margin 0
+                padding 0
+
+            li
+                margin-bottom 0.35em
+                &:last-child
+                    margin-bottom 0
+
+            a
+                text-decoration underline
+                overflow-wrap anywhere
+
+            summary
+                font-weight 700
+                cursor pointer
+
+            p
+                margin 0.35em 0 0
 
 #pagination
     padding 1em 0

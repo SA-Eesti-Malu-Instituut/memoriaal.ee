@@ -8,3 +8,27 @@
   from = "/episoodid.js"
   to = "/.netlify/functions/serve-episoodid"
   status = 200
+
+# EMMA single record pages - /baas/<id>/<NAME> and /en/baas/<id>/<NAME> are
+# served by the /baas/ page itself, which reads the record id from the address.
+# netlify/edge-functions/baas-person.js adds the record's title, description
+# and structured data on the way out.
+[[redirects]]
+  from = "/baas/:id"
+  to = "/baas/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/baas/:id/:name"
+  to = "/baas/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/en/baas/:id"
+  to = "/en/baas/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/en/baas/:id/:name"
+  to = "/en/baas/index.html"
+  status = 200

@@ -42,6 +42,24 @@ result:
     nameOnEVOPlaque: nimi ohvitseride mälestusmärgil
     family: perekond
 
+record:
+    notFound: Kirjet ei leitud
+    bornShort: snd
+    deadShort: srn
+    summary: Kirje Eesti Mälu Instituudi andmestus EMMA (Eesti Mälu ja Migratsiooni Andmestu).
+    source:
+        maintainedBy: Haldaja
+        maintainer: SA Eesti Mälu Instituut
+        about: Haldaja kohta
+        added: Lisatud
+        id: Memoriaali ID
+        permalink: Püsilink
+        citation: Viide
+        database: andmebaas
+        accessed: vaadatud
+        record: kirje
+        citing: allikad
+
 feedback:
     button: Tagasiside
     title: Tagasiside %name% kohta

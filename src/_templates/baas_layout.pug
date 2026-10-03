@@ -1,5 +1,12 @@
 block vars
 
+//- Address of this page and of the same page in other languages
+- var site = 'https://www.memoriaal.ee'
+- var root = self.path + '/'
+- var alternates = [{ lang: self.locale, root: root }]
+- for (var lang in self.otherLocalePaths) alternates.push({ lang: lang, root: self.otherLocalePaths[lang] + '/' })
+- alternates.push({ lang: 'x-default', root: (self.otherLocalePaths[self.defaultLocale] || self.path) + '/' })
+
 
 mixin markdown(text)
     | !{ self.md(text) }
@@ -10,11 +17,20 @@ html(lang=self.locale)
     head
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1')
-        meta(property='og:url', content='https://www.memoriaal.ee' + self.path)
-        meta(property='og:title', content=self.title ? self.title + ' · ' + self.siteTitle : self.siteTitle)
-        meta(property='og:image', content='https://www.memoriaal.ee/memoriaal-og.jpg')
 
+        //- On the page of a single record everything between the seo marks is
+        //- replaced by netlify/edge-functions/baas-person.js
+        <!--!seo-->
         title= self.title && self.title !== self.siteTitle ? self.title + ' · ' + self.siteTitle : self.siteTitle
+        link(rel='canonical', href=site + root)
+        each alternate in alternates
+            link(rel='alternate', hreflang=alternate.lang, href=site + alternate.root)
+        meta(property='og:type', content='website')
+        meta(property='og:url', content=site + root)
+        meta(property='og:title', content=self.title ? self.title + ' · ' + self.siteTitle : self.siteTitle)
+        <!--!/seo-->
+        meta(property='og:image', content=site + '/memoriaal-og.jpg')
+        meta(name='twitter:card', content='summary_large_image')
 
         link(rel='apple-touch-icon', sizes='180x180', href='/apple-touch-icon.png')
         link(rel='icon', type='image/png', sizes='32x32', href='/favicon-32x32.png')

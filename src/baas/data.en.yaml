@@ -37,6 +37,24 @@ result:
     nameOnEVOPlaque: nimi ohvitseride mälestusmärgil
     family: family
 
+record:
+    notFound: Record not found
+    bornShort: b.
+    deadShort: d.
+    summary: Record in EMMA, the Estonian Memorial & Migration Dataset of the Estonian Institute of Historical Memory.
+    source:
+        maintainedBy: Maintained by
+        maintainer: Estonian Institute of Historical Memory (SA Eesti Mälu Instituut)
+        about: About this manager
+        added: Added
+        id: Memoriaal ID
+        permalink: Permalink
+        citation: Source citation
+        database: database
+        accessed: accessed
+        record: record for
+        citing: citing
+
 feedback:
     button: Feedback
     title: Feedback about %name%
