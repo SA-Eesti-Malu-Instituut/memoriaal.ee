@@ -34,10 +34,13 @@ globalThis.baasRecord = (function () {
     const name = (p) => [p.eesnimi, p.perenimi].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim()
 
     // Names are kept in capitals, this is one as it is written in a sentence:
-    // 'MARTA-HERMINE EHASTE' -> 'Marta-Hermine Ehaste', 'OTTO VON ESSEN' -> 'Otto von Essen'
+    // 'MARTA-HERMINE EHASTE' -> 'Marta-Hermine Ehaste', 'OTTO VON ESSEN' -> 'Otto von Essen'.
+    // The small words stay small only where they stand on their own between names.
     const small = ['von', 'van', 'de', 'der', 'zu', 'af', 'al', 'ja', 'või', 'ehk', 'sünd', 'snd']
-    const properName = (p) => name(p).toLowerCase().replace(/[^\s\-/.,;:()'"<>?]+/g, (word) => (
-        small.includes(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)
+    const properName = (p) => name(p).toLowerCase().replace(/[^\s\-/.,;:()'"<>?]+/g, (word, at, all) => (
+        small.includes(word) && all[at - 1] === ' ' && /^[ .]/.test(all.slice(at + word.length))
+            ? word
+            : word.charAt(0).toUpperCase() + word.slice(1)
     ))
 
     // 'JÜRI ÕUN' -> 'JURI-OUN', the readable tail of a record's address.
