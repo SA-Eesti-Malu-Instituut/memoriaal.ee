@@ -534,10 +534,9 @@ block script
                 if (p.isanimi) { text.push('<p class="mb-0">#{self.result.father}: ' + p.isanimi + '</p>') }
                 if (p.emanimi) { text.push('<p class="mb-0">#{self.result.mother}: ' + p.emanimi + '</p>') }
                 // the id opens the record's own page with its source block in view,
-                // the icon next to it copies that address for sharing
-                const address = baasRecord.path(LOCALE.root, p) + '#source'
-                text.push('<p class="mb-0"># <a href="' + address + '">' + p.id + '</a>')
-                text.push(copyIcon(LOCALE.site + address))
+                // the icon next to it copies the id itself
+                text.push('<p class="mb-0"># <a href="' + baasRecord.path(LOCALE.root, p) + '#source">' + p.id + '</a>')
+                text.push(copyIcon(p.id))
                 text.push('</p>')
                 if (p.updated_at) {
                     text.push('<hr/>')
